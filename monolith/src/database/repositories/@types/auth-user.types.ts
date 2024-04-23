@@ -1,5 +1,6 @@
-export interface AuthUserSignUpRepository {
+export interface AuthCreateUserRepository {
   username: string;
   email: string;
-  password: string;
+  password?: string;
+  googleId?: string;
 }
