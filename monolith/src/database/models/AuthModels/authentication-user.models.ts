@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { userAuthTypes } from "./@Types/userAuth.interface";
+import { userAuthTypes } from "../@Types/userAuth.interface";
 
 const userAuthSchema = new mongoose.Schema<userAuthTypes>({
-  username: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   isVerified: {
@@ -13,10 +13,13 @@ const userAuthSchema = new mongoose.Schema<userAuthTypes>({
     type: Date,
     default: new Date(),
   },
-  updateAt: {
+  updatedAt: {
     type: Date,
-    default: new Date()
-  }
+    default: new Date(),
+  },
 });
 
-export const UserAuth = mongoose.model<userAuthTypes>('UserAuth', userAuthSchema);
+export const UserAuth = mongoose.model<userAuthTypes>(
+  "UserAuth",
+  userAuthSchema
+);

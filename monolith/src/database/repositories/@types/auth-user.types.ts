@@ -4,3 +4,9 @@ export interface AuthCreateUserRepository {
   password?: string;
   googleId?: string;
 }
+export interface AuthUpdateUserRepository {
+  username: string;
+  email: string;
+  password?: string;
+  googleId?: string;
+}

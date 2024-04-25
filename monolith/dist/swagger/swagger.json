@@ -6,7 +6,28 @@
 		"parameters": {},
 		"requestBodies": {},
 		"responses": {},
-		"schemas": {},
+		"schemas": {
+			"SignUpRequestBody": {
+				"properties": {
+					"username": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"username",
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
 		"securitySchemes": {}
 	},
 	"info": {
@@ -18,12 +39,12 @@
 		"contact": {}
 	},
 	"paths": {
-		"/": {
-			"get": {
-				"operationId": "ShowResponse",
+		"/auth/signup": {
+			"post": {
+				"operationId": "SignUpUser",
 				"responses": {
-					"OK": {
-						"description": "",
+					"201": {
+						"description": "Created",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -32,10 +53,20 @@
 					}
 				},
 				"tags": [
-					"monolith"
+					"Authentication"
 				],
 				"security": [],
-				"parameters": []
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SignUpRequestBody"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

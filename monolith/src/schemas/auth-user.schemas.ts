@@ -20,7 +20,7 @@ export const AuthUserSignUpSchema = z.object({
         };
       }
 
-      return true;
+      // No explicit return value needed here, Zod handles successful validation
     }, "Password must be strong"),
   username: z.string().min(4, "Full name is required"),
 });
