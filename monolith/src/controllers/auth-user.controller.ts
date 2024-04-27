@@ -18,6 +18,7 @@ import validateInput from "../middlewares/validate-input";
 import AuthUserSignInSchema, {
   AuthUserSignUpSchema,
 } from "../schemas/auth-user.schemas";
+import { use } from "passport";
 
 interface LoginRequestBody {
   email: string;
@@ -111,10 +112,12 @@ export class UserAuthController {
     }
   }
   @SuccessResponse(StatusCode.OK, "OK")
-  @Get("/auth/google/callback")
+  @Post("/auth/google/callback")
   async GoogleOAuth(@Body() code: string): Promise<any> {
     try {
-      return await this.userService.SignInWithGoogleCallback(code);
+      const user = await this.userService.SignInWithGoogleCallback(code);
+      console.log(user);
+      return user;
     } catch (error) {
       throw error;
     }

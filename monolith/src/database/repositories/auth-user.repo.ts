@@ -91,9 +91,9 @@ export class UserAuthRpository {
   }: AuthCreateUserRepository) {
     try {
       const user = new UserAuthModel({
-        username,
-        email,
-        isVerified,
+        username: username,
+        email: email,
+        isVerified: isVerified,
         googleId: googleId,
         profile: profile,
       });

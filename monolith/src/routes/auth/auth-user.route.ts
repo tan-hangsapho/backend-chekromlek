@@ -6,11 +6,16 @@ import AuthUserSignInSchema, {
 } from "../../schemas/auth-user.schemas";
 import { StatusCode } from "../../utils/consts";
 import CustomError from "../../errors/custom-erorrs";
-import { OauthConfig } from "../../utils/oath-config";
+import axios from "axios";
+import { UserAuthRpository } from "../../database/repositories/auth-user.repo";
+import { generateSignature } from "../../utils/jwt";
+import { VerificationRepository } from "../../database/repositories/verification-request.repo";
+import jwt, { JwtPayload } from "jsonwebtoken"; // Import the jwt module
 
 export const userRouter = express.Router();
 const controllers = new UserAuthController();
-
+const auth = new UserAuthRpository();
+const verificationRepo = new VerificationRepository();
 userRouter.post(
   "/signup",
   validate(AuthUserSignUpSchema), // Validate request body against the schema
@@ -51,37 +56,100 @@ userRouter.post("/login", validate(AuthUserSignInSchema), async (req, res) => {
     res.status(statusCode).json({ message: error.message });
   }
 });
+const CLIENT_ID = process.env.CLIENT_ID as string;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.CLIENT_URL as string;
 
-userRouter.get(
-  "/auth/google",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const redirect = "http://localhost:3000/auth/google/callback";
-      const clientId = process.env.CLIENT_ID as string;
-      const googleConfig = await OauthConfig.getInstance();
-      const authUrl = await googleConfig.GoogleConfigUrl(clientId, redirect);
-      res.redirect(authUrl);
-    } catch (error) {
-      next(error);
+userRouter.get("/auth/google", (req, res) => {
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=profile email`;
+  res.redirect(url);
+});
+
+userRouter.get("/auth/google/callback", async (req, res) => {
+  const { code } = req.query;
+
+  try {
+    // Exchange authorization code for access token
+    const { data } = await axios.post("https://oauth2.googleapis.com/token", {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      code,
+      redirect_uri: REDIRECT_URI,
+      grant_type: "authorization_code",
+    });
+
+    const { access_token, id_token } = data;
+
+    // Use id_token to verify user's identity
+    const decodedToken = jwt.decode(id_token) as JwtPayload; // Type assertion here
+    if (!decodedToken) {
+      throw new Error("Failed to decode ID token");
     }
-  }
-);
 
-userRouter.get(
-  "/auth/google/callback",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { code } = req.query;
-    try {
-      const queryCode = code as string;
-      const userInfoResponse = await controllers.GoogleOAuth(queryCode);
+    // Extract user information from the ID token
+    const { email, name, sub: googleId } = decodedToken;
 
-      res.status(StatusCode.OK).json({
-        success: true,
-        user: userInfoResponse.newUser,
-        token: userInfoResponse.jwtToken,
-      });
-    } catch (error) {
-      next(error);
+    // Check if the user already exists in the database
+    let user = await auth.FindUser({ email });
+
+    if (user) {
+      throw new Error(
+        "Email already exists, please sign up with another account"
+      );
     }
+
+    // Create a new user if not found
+    const newUser = await auth.CreateOauthUser({
+      username: name as string,
+      email: email as string,
+      googleId: googleId as string,
+      isVerified: true, // Assuming Google OAuth users are verified
+    });
+    await newUser.save();
+
+    // Generate JWT token
+    const jwtToken = generateSignature({ payload: newUser.googleId });
+
+    // Respond with the JWT token
+    res.json({ username: name });
+  } catch (error) {
+    console.error("Error:", error.response?.data?.error || error.message);
+    res.status(StatusCode.BadRequest).json({ message: error.message });
   }
-);
+});
+
+// userRouter.get(
+//   "/auth/google",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const googleConfig = await OauthConfig.getInstance();
+//       const authUrl = await googleConfig.GoogleConfigUrl(
+//         CLIENT_ID,
+//         REDIRECT_URI
+//       );
+//       res.redirect(authUrl);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
+
+// userRouter.get(
+//   "/auth/google/callback",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { code } = req.query;
+//     try {
+//       const queryCode = code as string;
+//       const userInfoResponse = await controllers.GoogleOAuth(queryCode);
+
+//       res.status(StatusCode.OK).json({
+//         success: true,
+//         user: userInfoResponse.newUser,
+//         token: userInfoResponse.jwtToken,
+//       });
+//     } catch (error) {
+//       console.log(error);
+//       next(error);
+//     }
+//   }
+// );

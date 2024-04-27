@@ -1,7 +1,6 @@
-export interface userAuthTypes {
+export interface userAuthTypes extends AuthUserTypeDoc {
   username: string;
   email: string;
-  password: string;
   isVerified?: boolean;
   facebookId?: string;
   googleId?: string;
@@ -10,7 +9,7 @@ export interface userAuthTypes {
   updatedAt?: Date;
 }
 
-export interface AuthUserTypeDoc extends Document {
+export interface AuthUserTypeDoc {
   username: string;
   email: string;
   password?: string;
