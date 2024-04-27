@@ -20,12 +20,13 @@ export const AuthUserSignUpSchema = z.object({
         };
       }
 
-      return true;
+      // No explicit return value needed here, Zod handles successful validation
     }, "Password must be strong"),
   username: z.string().min(4, "Full name is required"),
 });
 
-export const AuthUserSignInSchema = z.object({
+const AuthUserSignInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
+export default AuthUserSignInSchema;
