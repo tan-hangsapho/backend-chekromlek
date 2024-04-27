@@ -1,11 +1,10 @@
-import CustomError from "../../../errors/custom-erorrs";
-import { StatusCode } from "../../../utils/consts";
-import { userAuthTypes } from "../../models/@Types/userAuth.interface";
-import { UserAuth } from "../../models/AuthModels/authentication-user.models";
+import CustomError from "../../errors/custom-erorrs";
+import { StatusCode } from "../../utils/consts";
+import { UserAuthModel } from "../models/authentication-user.models";
 import {
   AuthCreateUserRepository,
   AuthUpdateUserRepository,
-} from "../@types/auth-user.types";
+} from "./@types/auth-user.types";
 
 export class UserAuthRpository {
   // Create User Account
@@ -16,7 +15,7 @@ export class UserAuthRpository {
         throw new CustomError("Email already exist", StatusCode.Found);
       }
       //new user and create user
-      const newAuthUser = new UserAuth(user);
+      const newAuthUser = new UserAuthModel(user);
       const userResult = await newAuthUser.save();
       return userResult;
     } catch (error: any) {
@@ -29,7 +28,7 @@ export class UserAuthRpository {
   // Find User Account
   async FindUser({ email }: { email: string }) {
     try {
-      const existingUser = await UserAuth.findOne({ email: email });
+      const existingUser = await UserAuthModel.findOne({ email: email });
       return existingUser;
     } catch (error: any) {
       throw new Error("error is not found");
@@ -37,7 +36,7 @@ export class UserAuthRpository {
   }
   async FindUserById({ id }: { id: string }) {
     try {
-      const existingUser = await UserAuth.findById(id);
+      const existingUser = await UserAuthModel.findById(id);
       return existingUser;
     } catch (error) {
       throw new CustomError("user is not found", StatusCode.NotFound);
@@ -55,7 +54,7 @@ export class UserAuthRpository {
       throw new CustomError("User does not exist", StatusCode.NotFound);
     }
     try {
-      const existingUser = await UserAuth.findByIdAndUpdate(id, update, {
+      const existingUser = await UserAuthModel.findByIdAndUpdate(id, update, {
         new: true,
       });
       return existingUser;
@@ -65,21 +64,46 @@ export class UserAuthRpository {
   }
   async checkUniqueUsername(username: string) {
     try {
-      // Replace 'UserAuth' with your actual Mongoose model name
-      const existingUser = await UserAuth.findOne({ username });
+      // Replace 'UserAuthModel' with your actual Mongoose model name
+      const existingUser = await UserAuthModel.findOne({ username });
       return !existingUser;
     } catch (error) {
       throw new CustomError(error.message, StatusCode.BadRequest);
     }
   }
-  async findUserByUsernameOrEmail(
-    usernameOrEmail: string
-  ): Promise<userAuthTypes | null> {
-    // Search for a user by username or email
-    const user = await UserAuth.findOne({
-      $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-    });
+  // }
+  // async findUserByUsernameOrEmail(
+  //   usernameOrEmail: string
+  // ): Promise<userAuthTypes | null> {
+  //   // Search for a user by username or email
+  //   const user = await UserAuthModel.findOne({
+  //     $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+  //   });
 
-    return user;
+  //   return user;
+  // }
+  async CreateOauthUser({
+    username,
+    email,
+    googleId,
+    isVerified,
+    profile,
+  }: AuthCreateUserRepository) {
+    try {
+      const user = new UserAuthModel({
+        username,
+        email,
+        isVerified,
+        googleId: googleId,
+        profile: profile,
+      });
+      const userResult = await user.save();
+      if (!user) {
+        throw new CustomError("Unable to create user into Database!");
+      }
+      return userResult;
+    } catch (error) {
+      throw error;
+    }
   }
 }

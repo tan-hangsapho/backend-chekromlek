@@ -5,18 +5,17 @@ import { StatusCode } from "../utils/consts";
 import * as nodemailer from "nodemailer";
 import { generateEmailVerificationToken } from "../utils/verification-token";
 import VerificationModel from "../database/models/verification-request.model";
-import { UserAuthRpository } from "../database/repositories/AuthRepo/auth-user.repo";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { UserAuthRpository } from "../database/repositories/auth-user.repo";
+import { emailConfig } from "../utils/config";
 
 export class VerificationService {
   private verificationRepo: VerificationRepository;
   private userRepo: UserAuthRpository;
-
+  private readonly emailConfig: { user: string; pass: string };
   constructor() {
     this.verificationRepo = new VerificationRepository();
     this.userRepo = new UserAuthRpository();
+    this.emailConfig = emailConfig;
   }
   async sendVerificationEmail(user: userAuthTypes, verificationToken: string) {
     try {
@@ -24,8 +23,8 @@ export class VerificationService {
       const transporter = nodemailer.createTransport({
         service: "Gmail",
         auth: {
-          user: process.env.USER,
-          pass: process.env.PASS,
+          user: this.emailConfig.user,
+          pass: this.emailConfig.pass,
         },
       });
 
@@ -43,11 +42,8 @@ export class VerificationService {
 
       // Send email
       const info = await transporter.sendMail(mailOptions);
-      console.log("Email sent:", info.response);
       return info;
     } catch (error) {
-      // Handle error
-      console.error("Error sending email:", error);
       throw new CustomError(
         "Failed to send verification email.",
         StatusCode.BadRequest
@@ -57,20 +53,20 @@ export class VerificationService {
   async VerifyEmailToken(token: string) {
     try {
       // Find the account verification entry in the database using the token
-      const accountVerification =
+      const verification =
         await this.verificationRepo.FindAccountVerificationToken({
           token,
         });
 
       // Check if the token is not found
-      if (!accountVerification) {
+      if (!verification) {
         throw new CustomError(
           "Verification token is invalid",
           StatusCode.NotFound
         );
       }
 
-      const expirationDate = new Date(accountVerification.createdAt);
+      const expirationDate = new Date(verification.expiredDate);
       expirationDate.setMinutes(expirationDate.getMinutes() + 1); // Add 1 minute
       const now = new Date();
       if (now > expirationDate) {
@@ -79,7 +75,7 @@ export class VerificationService {
         const newToken = generateEmailVerificationToken(); // Generate new token
         // Get user information based on the account verification entry
         const user = await this.userRepo.FindUserById({
-          id: accountVerification.userId.toString(),
+          id: verification.userId.toString(),
         });
         if (!user) {
           throw new CustomError("User not found", StatusCode.NotFound);
@@ -101,7 +97,7 @@ export class VerificationService {
       }
       // Convert the userId to string
       const user = await this.userRepo.FindUserById({
-        id: accountVerification.userId.toString(),
+        id: verification.userId.toString(),
       });
       // Fetch the user using the converted userId
       if (!user) {
@@ -112,7 +108,7 @@ export class VerificationService {
       await user.save();
       // Delete the account verification entry
       await this.verificationRepo.deleteAccountVerificationToken({
-        token: accountVerification.token,
+        token: verification.token,
       });
 
       return user;

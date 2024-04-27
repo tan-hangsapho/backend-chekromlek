@@ -25,7 +25,8 @@ export const AuthUserSignUpSchema = z.object({
   username: z.string().min(4, "Full name is required"),
 });
 
-export const AuthUserSignInSchema = z.object({
+const AuthUserSignInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
+export default AuthUserSignInSchema;
