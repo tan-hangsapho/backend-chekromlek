@@ -41,8 +41,7 @@
 				},
 				"required": [
 					"username",
-					"email",
-					"password"
+					"email"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -95,7 +94,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/auth/signup": {
+		"/auth/auth/signup": {
 			"post": {
 				"operationId": "SignUpUser",
 				"responses": {
@@ -127,7 +126,7 @@
 				}
 			}
 		},
-		"/auth/verify": {
+		"/auth/auth/verify": {
 			"get": {
 				"operationId": "VerifyEmail",
 				"responses": {
@@ -166,7 +165,7 @@
 				]
 			}
 		},
-		"/auth/login": {
+		"/auth/auth/login": {
 			"post": {
 				"operationId": "LoginWithEmail",
 				"responses": {
@@ -200,38 +199,6 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/LoginRequestBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/auth/google/callback": {
-			"post": {
-				"operationId": "GoogleOAuth",
-				"responses": {
-					"200": {
-						"description": "OK",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/userAuthTypes"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Authentication"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"type": "string"
 							}
 						}
 					}

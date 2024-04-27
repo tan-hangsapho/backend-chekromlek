@@ -40,7 +40,7 @@ export class UserAuthController {
     this.verfication = new VerificationService();
   }
   @SuccessResponse(StatusCode.Created, "Created")
-  @Post("/signup")
+  @Post("/auth/signup")
   @Middlewares(validateInput(AuthUserSignUpSchema))
   public async SignUpUser(
     @Body() reqBody: SignUpRequestBody
@@ -63,7 +63,7 @@ export class UserAuthController {
     }
   }
   @SuccessResponse(StatusCode.OK, "OK")
-  @Get("/verify")
+  @Get("/auth/verify")
   public async VerifyEmail(@Query() token: string): Promise<{ token: string }> {
     try {
       // Verify the email token
@@ -79,7 +79,7 @@ export class UserAuthController {
     }
   }
   @SuccessResponse(StatusCode.OK, "OK")
-  @Post("/login")
+  @Post("/auth/login")
   @Middlewares(validateInput(AuthUserSignInSchema))
   public async LoginWithEmail(
     @Body() requestBody: LoginRequestBody
@@ -88,7 +88,6 @@ export class UserAuthController {
       const { email, password } = requestBody;
       // Call the userService to perform the login operation
       const jwtToken = await this.userService.Login({ email, password });
-      console.log(jwtToken);
       if (!jwtToken) {
         // Handle failed login with a specific error
         throw new CustomError(
@@ -111,15 +110,15 @@ export class UserAuthController {
       }
     }
   }
-  @SuccessResponse(StatusCode.OK, "OK")
-  @Post("/auth/google/callback")
-  async GoogleOAuth(@Body() code: string): Promise<any> {
-    try {
-      const user = await this.userService.SignInWithGoogleCallback(code);
-      console.log(user);
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
+  // @SuccessResponse(StatusCode.OK, "OK")
+  // @Post("/auth/google/callback")
+  // async GoogleOAuth(@Body() code: string): Promise<any> {
+  //   try {
+  //     const user = await this.userService.SignInWithGoogleCallback(code);
+  //     console.log(user);
+  //     return user;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }

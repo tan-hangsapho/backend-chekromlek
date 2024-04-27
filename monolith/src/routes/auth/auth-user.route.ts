@@ -15,9 +15,8 @@ import jwt, { JwtPayload } from "jsonwebtoken"; // Import the jwt module
 export const userRouter = express.Router();
 const controllers = new UserAuthController();
 const auth = new UserAuthRpository();
-const verificationRepo = new VerificationRepository();
 userRouter.post(
-  "/signup",
+  "/auth/signup",
   validate(AuthUserSignUpSchema), // Validate request body against the schema
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -32,7 +31,7 @@ userRouter.post(
   }
 );
 userRouter.get(
-  "/verify",
+  "/auth/verify",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = req.query.token as string; // Assuming the token is passed as a query parameter
@@ -43,19 +42,23 @@ userRouter.get(
     }
   }
 );
-userRouter.post("/login", validate(AuthUserSignInSchema), async (req, res) => {
-  try {
-    const requestBody = req.body;
-    await controllers.LoginWithEmail(requestBody);
-    return res.status(StatusCode.OK).json({ message: "Login Success" });
-  } catch (error: any) {
-    let statusCode = StatusCode.BadRequest; // Default status code for validation errors
-    if (error instanceof CustomError) {
-      statusCode = error.statusCode; // Use the status code from the CustomError if available
+userRouter.post(
+  "/auth/login",
+  validate(AuthUserSignInSchema),
+  async (req, res) => {
+    try {
+      const requestBody = req.body;
+      await controllers.LoginWithEmail(requestBody);
+      return res.status(StatusCode.OK).json({ message: "Login Success" });
+    } catch (error: any) {
+      let statusCode = StatusCode.BadRequest; // Default status code for validation errors
+      if (error instanceof CustomError) {
+        statusCode = error.statusCode; // Use the status code from the CustomError if available
+      }
+      res.status(statusCode).json({ message: error.message });
     }
-    res.status(statusCode).json({ message: error.message });
   }
-});
+);
 const CLIENT_ID = process.env.CLIENT_ID as string;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.CLIENT_URL as string;
