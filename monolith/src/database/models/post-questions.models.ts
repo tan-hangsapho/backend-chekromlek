@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export interface PostQuestions {
   title: string;
-  content: string;
+  description: string;
   postStamp: Date; // Add postedAt property
   authorId: mongoose.Schema.Types.ObjectId;
   likes: number;
@@ -13,7 +13,7 @@ export interface PostQuestions {
 
 const postQuestionsSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  content: { type: String, required: true },
+  description: { type: String },
   authorId: { type: mongoose.Schema.Types.ObjectId, auto: true },
   category: { type: String, required: true },
   likes: { type: Number, default: 0 },
