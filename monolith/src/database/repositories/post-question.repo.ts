@@ -8,14 +8,17 @@ import {
   UpdatePostRepository,
 } from "./@types/post-question.types";
 
-class PostRepository {
+export class PostRepository {
   async createPost(post: CreatePostType) {
     try {
       const newPost = new PostQuestionsModel(post);
       return await newPost.save();
-    } catch (error: any) {
+    } catch (error) {
       throw new CustomError(error.message, StatusCode.BadRequest);
     }
+  }
+  async deleteById(id: string): Promise<PostQuestions> {
+    return PostQuestionsModel.findByIdAndDelete(id);
   }
   async updateById({
     id,
