@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { app } from "./app";
 import { connectMongoDB } from "./utils/dbconnection";
 dotenv.config();
-const port = process.env.PORT;
+const port = process.env.PORT || 3001;
 
 
 connectMongoDB().then(() => {
