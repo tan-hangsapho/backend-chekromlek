@@ -1,0 +1,59 @@
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    line-height: 1.5;
+  }
+
+  .reset-btn {
+    display: block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: center;
+  }
+</style>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Forgot Your Password?</h1>
+    </div>
+    <div class="content">
+      <p>
+        We heard you forgot your password. No worries, we can help you reset it.
+      </p>
+      <%-- Use EJS to dynamically generate the reset link request link --%>
+      <p>
+        <a href="<%= resetLinkRequest %>" class="reset-btn"
+          >Request Password Reset</a
+        >
+      </p>
+      <p>
+        Clicking this button will send you an email with instructions on how to
+        reset your password.
+      </p>
+    </div>
+  </div>
+</body>
