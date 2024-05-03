@@ -1,5 +1,5 @@
-import getConfig from "@notifications/utils/config";
-import { SmtpServer, SmtpServerConfig } from "./@types/email-sender.types";
+import getConfig from '@notifications/utils/config';
+import { SmtpServer, SmtpServerConfig } from './@types/email-sender.types';
 
 export default class NodemailerSmtpServer implements SmtpServer {
   private host = getConfig().smtpHost;

@@ -1,11 +1,11 @@
-import Mail from "nodemailer/lib/mailer";
-import nodemailer from "nodemailer";
-import NodemailerSmtpServer from "./nodemailer-smtp-server";
-import path from "path";
-import Email from "email-templates";
-import { logger } from "./logger";
-import getConfig from "@notifications/utils/config";
-import { EmailApi, IEmailLocals } from "./@types/email-sender.types";
+import Mail from 'nodemailer/lib/mailer';
+import nodemailer from 'nodemailer';
+import NodemailerSmtpServer from './nodemailer-smtp-server';
+import path from 'path';
+import Email from 'email-templates';
+import { logger } from './logger';
+import getConfig from '@notifications/utils/config';
+import { EmailApi, IEmailLocals } from './@types/email-sender.types';
 
 export default class NodemailerEmailApi implements EmailApi {
   private transporter: Mail;
@@ -31,20 +31,20 @@ export default class NodemailerEmailApi implements EmailApi {
         transport: this.transporter,
         views: {
           options: {
-            extension: "ejs",
+            extension: 'ejs',
           },
         },
         juice: true, // use inline css style
         juiceResources: {
           preserveImportant: true,
           webResources: {
-            relativeTo: path.join(__dirname, "../../build"),
+            relativeTo: path.join(__dirname, '../../build'),
           },
         },
       });
 
       await email.send({
-        template: path.join(__dirname, "../../src/emails", template),
+        template: path.join(__dirname, '../../src/emails', template),
         message: {
           to: receiver,
         },
@@ -53,6 +53,7 @@ export default class NodemailerEmailApi implements EmailApi {
 
       logger.info(`Email send successfully.`);
     } catch (error) {
+      console.log(error);
       logger.error(`NotificationService SendMail() method error: ${error}`);
     }
   }

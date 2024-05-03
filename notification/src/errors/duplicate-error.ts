@@ -1,6 +1,6 @@
-import { StatusCode } from "../utils/const";
-import { SerializedErrorOutput } from "./@types/serialized-error-output";
-import BaseCustomError from "./base-custom-error";
+import { StatusCode } from '../utils/consts';
+import { SerializedErrorOutput } from './@types/serialized-error-output';
+import BaseCustomError from './base-custom-error';
 
 export default class DuplicateError extends BaseCustomError {
   constructor(message: string) {

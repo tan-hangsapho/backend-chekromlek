@@ -1,55 +1,143 @@
-<style>
-  body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-  }
+<div>
+  <div></div>
+  <div tabindex="-1"></div>
+  <div>
+    <div>
+      <u></u>
 
-  .container {
-    padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    border-radius: 5px;
-    background-color: #f5f5f5;
-  }
+      <div style="margin: 0 !important; padding: 0 !important">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody>
+            <tr>
+              <td
+                width="100%"
+                align="center"
+                valign="top"
+                bgcolor="#eeeeee"
+                height="20"
+              ></td>
+            </tr>
+            <tr>
+              <td
+                bgcolor="#eeeeee"
+                align="center"
+                style="padding: 0px 15px 0px 15px"
+              >
+                <table
+                  bgcolor="#ffffff"
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
+                  width="100%"
+                  style="max-width: 600px"
+                >
+                  <tbody>
+                    <tr>
+                      <td>
+                        <table
+                          width="100%"
+                          border="0"
+                          cellspacing="0"
+                          cellpadding="0"
+                        >
+                          <tbody>
+                            <tr>
+                              <td
+                                align="center"
+                                style="padding: 40px 40px 0px 40px"
+                              >
+                                <a href="<%= appLink %>" target="_blank">
+                                  <img
+                                    src="<%= appIcon %>"
+                                    width="70"
+                                    border="0"
+                                    style="vertical-align: middle"
+                                    class="CToWUd"
+                                    data-bit="iit"
+                                  />
+                                </a>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td
+                                align="center"
+                                style="
+                                  font-size: 18px;
+                                  color: #0e0e0f;
+                                  font-weight: 700;
+                                  font-family: Helvetica Neue;
+                                  line-height: 28px;
+                                  vertical-align: top;
+                                  text-align: center;
+                                  padding: 35px 40px 0px 40px;
+                                "
+                              >
+                                <strong>Password Reset Success</strong>
+                              </td>
+                            </tr>
 
-  .header {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+                            <tr>
+                              <td
+                                align="center"
+                                bgcolor="#ffffff"
+                                height="1"
+                                style="padding: 40px 40px 5px"
+                                valign="top"
+                                width="100%"
+                              >
+                                <table
+                                  cellpadding="0"
+                                  cellspacing="0"
+                                  width="100%"
+                                >
+                                  <tbody>
+                                    <tr>
+                                      <td
+                                        style="border-top: 1px solid #e4e4e4"
+                                      ></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
 
-  .content {
-    line-height: 1.5;
-  }
+                            <tr>
+                              <td
+                                style="
+                                  font: 16px/22px 'Helvetica Neue', Arial,
+                                    'sans-serif';
+                                  text-align: left;
+                                  color: #555555;
+                                  padding: 10px 40px 0px 40px;
+                                "
+                              >
+                                <p>
+                                  Hi <%= username %>,<br />
+                                  You password was successfully changed.
+                                </p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
 
-  .reset-btn {
-    display: block;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-    text-align: center;
-  }
-</style>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>Reset Your Password</h1>
-    </div>
-    <div class="content">
-      <p>
-        We received a request to reset your password. If you didn't initiate
-        this request, please disregard this email.
-      </p>
-      <%-- Use EJS to dynamically generate the reset link --%>
-      <p>
-        <a href="<%= resetLink %>" class="reset-btn">Reset Password</a>
-      </p>
-      <p>This link will expire in <%= expiry %> hours.</p>
+                    <tr>
+                      <td
+                        width="100%"
+                        align="center"
+                        valign="top"
+                        bgcolor="#ffffff"
+                        height="45"
+                      ></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</body>
+</div>

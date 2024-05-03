@@ -1,6 +1,6 @@
-import { StatusCode } from "../utils/const/status-code";
-import { SerializedErrorOutput } from "./@types/serialized-error-output";
-import BaseCustomError from "./base-custom-error";
+import { StatusCode } from '../utils/consts/status-code';
+import { SerializedErrorOutput } from './@types/serialized-error-output';
+import BaseCustomError from './base-custom-error';
 
 export default class APIError extends BaseCustomError {
   constructor(
