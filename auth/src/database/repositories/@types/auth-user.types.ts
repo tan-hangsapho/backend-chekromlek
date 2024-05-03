@@ -8,7 +8,6 @@ export interface AuthCreateUserRepository {
 }
 export interface AuthUpdateUserRepository {
   username?: string;
-  email?: string;
   password?: string;
   googleId?: string;
 }

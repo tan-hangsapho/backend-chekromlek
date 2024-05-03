@@ -1,22 +1,20 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
-    "rootDir": "./src",
     "esModuleInterop": true,
+    "target": "es6", // compile to es6
     "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "sourceMap": true,
+    "rootDir": "./",
+    "outDir": "./build",
+    "strict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "./dist"
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/swagger/*.ts",
-    "tsoa.json" // Add this line to include the TSOA configuration file
-  ],
-  "exclude": ["node_modules", "dist"],
-  "lib": ["es2015", "es6", "dom"],
-  "typeRoots": ["node_modules/@types"],
-  "types": ["node", "express"]
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "alwaysStrict": true,
+    "pretty": true
+  }
 }

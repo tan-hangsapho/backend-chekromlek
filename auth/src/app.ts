@@ -37,7 +37,7 @@ RegisterRoutes(app);
 // app.use("/", userRouter);
 // app.use("/", postRouter);
 // middleware
-app.all("*", (req: Request, res: Response, next: NextFunction) => {
+app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
   next(new Error(`page could be not found!`));
 });
 app.use(loggerMiddleware);

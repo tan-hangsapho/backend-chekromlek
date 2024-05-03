@@ -1,4 +1,4 @@
-import mongoose, { Model } from "mongoose";
+import mongoose from "mongoose";
 import { userAuthTypes } from "./@Types/userAuth.interface";
 
 const userAuthSchema = new mongoose.Schema(
@@ -26,7 +26,7 @@ const userAuthSchema = new mongoose.Schema(
   },
   {
     toJSON: {
-      transform(doc, ret) {
+      transform(_doc, ret) {
         delete ret.password;
         delete ret.googleId;
         delete ret.__v;

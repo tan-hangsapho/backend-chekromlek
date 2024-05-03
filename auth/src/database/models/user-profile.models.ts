@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, ObjectId } from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
 
 export interface IUser {
   username: string;
@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     toJSON: {
-      transform(doc, ret) {
+      transform(_doc, ret) {
         delete ret.__v;
       },
     },

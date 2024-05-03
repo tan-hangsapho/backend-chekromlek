@@ -67,7 +67,7 @@ export class UserAuthRpository {
       // Replace 'UserAuthModel' with your actual Mongoose model name
       const existingUser = await UserAuthModel.findOne({ username });
       return !existingUser;
-    } catch (error) {
+    } catch (error: any) {
       throw new CustomError(error.message, StatusCode.BadRequest);
     }
   }

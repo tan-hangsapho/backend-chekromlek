@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import APIError from "../errors/api-error";
 import path from "path";
-
+dotenv.config();
 function createConfig(configPath: string) {
   dotenv.config({ path: configPath });
 

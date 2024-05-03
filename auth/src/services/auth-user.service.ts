@@ -16,7 +16,7 @@ import APIError from "../errors/api-error";
 import DuplicateError from "../errors/duplicate-error";
 import { logger } from "../utils/logger";
 import { publishDirectMessage } from "../queues/auth-producer";
-import { authChannel } from "../server";
+import { authChannel } from "../utils/server";
 
 export class UserAuthService {
   private userRepo: UserAuthRpository;
@@ -37,12 +37,6 @@ export class UserAuthService {
       const existingUser = await this.userRepo.FindUser({ email: user.email });
 
       if (existingUser) {
-        if (!existingUser.isVerified) {
-          throw new CustomError(
-            "Email not verified, please verify your email address",
-            StatusCode.BadRequest
-          );
-        }
         throw new CustomError(
           "Email address is already in use",
           StatusCode.Found
@@ -176,16 +170,13 @@ export class UserAuthService {
       throw error;
     }
   }
-  async UpdateUser({ id, updates }: { id: string; updates: object }) {
+  async UpdateUser({ id, update }: { id: string; update: object }) {
     try {
       const user = await this.userRepo.FindUserById({ id });
       if (!user) {
         throw new APIError("User does not exist", StatusCode.NotFound);
       }
-      const updatedUser = await this.userRepo.UpdateUserbyId({
-        id,
-        update: updates,
-      });
+      const updatedUser = await this.userRepo.UpdateUserbyId({ id, update });
       return updatedUser;
     } catch (error) {
       throw error;

@@ -4,7 +4,7 @@ import { ZodSchema, ZodError } from "zod";
 import InvalidInputError from "../errors/invalid-input-error";
 
 const validateInput = (schema: ZodSchema) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     try {
       schema.parse(req.body);
       next();

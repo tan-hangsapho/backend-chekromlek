@@ -11,20 +11,19 @@ import {
 import { StatusCode } from "../utils/consts";
 import { UserAuthService } from "../services/auth-user.service";
 import CustomError from "../errors/custom-erorrs";
-import { userAuthTypes } from "../database/models/@Types/userAuth.interface";
 import { generateSignature } from "../utils/jwt";
 import validateInput from "../middlewares/validate-input";
 import AuthUserSignInSchema, {
   AuthUserSignUpSchema,
 } from "../schemas/auth-user.schemas";
-import { use } from "passport";
 import { publishDirectMessage } from "../queues/auth-producer";
-import { authChannel } from "../server";
 import { logger } from "../utils/logger";
 import APIError from "../errors/api-error";
 import { IAuthUserMessageDetails } from "../queues/@types/auth.types";
 import axios from "axios";
-
+import { authChannel } from "../utils/server";
+import dotenv from "dotenv";
+dotenv.config();
 interface LoginRequestBody {
   email: string;
   password: string;
@@ -111,7 +110,7 @@ export class UserAuthController {
 
       await publishDirectMessage(
         authChannel,
-        "microsample-user-update",
+        "Chekromlek-user-update",
         "user-applier",
         JSON.stringify(messageDetails),
         "User details sent to user service"
@@ -157,7 +156,7 @@ export class UserAuthController {
   @SuccessResponse(StatusCode.OK, "OK")
   @Get("/google")
   public async GoogleAuth() {
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.CLIENT_URL}&response_type=code&scope=profile email`;
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.CLIENT_URI}&response_type=code&scope=profile email`;
     return { url };
   }
   @SuccessResponse(StatusCode.OK, "OK")
@@ -185,8 +184,8 @@ export class UserAuthController {
         // User Exists, link the Google account if it's not already linked
         if (!existingUser.googleId) {
           await this.userService.UpdateUser({
-            id: existingUser._id.toString(),
-            updates: { googleId: profile.data.id, isVerified: true },
+            id: existingUser.id,
+            update: { googleId: profile.data.id, isVerified: true },
           });
         }
 
@@ -215,7 +214,7 @@ export class UserAuthController {
         token: jwtToken,
       };
     } catch (error) {
-      throw new error();
+      throw error;
     }
   }
 }

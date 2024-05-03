@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import VerificationModel from "../models/verification-request.model";
 
 export class VerificationRepository {

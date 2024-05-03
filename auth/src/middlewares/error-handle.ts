@@ -3,7 +3,7 @@ import { ErrorStateCode } from "../utils/error-status-code";
 
 function errorHandler(
   err: Error,
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) {
