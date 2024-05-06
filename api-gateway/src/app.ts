@@ -40,7 +40,7 @@ import unless from "./middleware/unless-route";
   // );
   
   // Prevent HTTP Parameter Pollution attacks
- app.use(hpp());
+//  app.use(hpp());
   
   // Prevent Some Security:
   // - Stops browsers from sharing your site's vistor data

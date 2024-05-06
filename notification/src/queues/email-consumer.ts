@@ -1,9 +1,9 @@
-import { logger } from "@notifications/utils/logger";
-import { createQueueConnection } from "./connection";
-import getConfig from "@notifications/utils/config";
-import { Channel, ConsumeMessage } from "amqplib";
-import { IEmailLocals } from "@notifications/utils/@types/email-sender.types";
-import EmailSender from "@notifications/utils/email-sender";
+import { logger } from '@notifications/utils/logger';
+import { createQueueConnection } from './connection';
+import getConfig from '@notifications/utils/config';
+import { Channel, ConsumeMessage } from 'amqplib';
+import { IEmailLocals } from '@notifications/utils/@types/email-sender.types';
+import EmailSender from '@notifications/utils/email-sender';
 
 // TODO:
 // 1. Check If Channel Exist. If Not Create Once
@@ -20,36 +20,38 @@ export async function consumeAuthEmailMessages(
       channel = (await createQueueConnection()) as Channel;
     }
 
-    const exchangeName = "microsample-email-notification";
-    const routingKey = "auth-email";
-    const queueName = "auth-email-queue";
+    const exchangeName = 'chekromlek-email-notification';
+    const routingKey = 'auth-email';
+    const queueName = 'auth-email-queue';
+    if (channel) {
+      await channel.assertExchange(exchangeName, 'direct');
+      const queue = await channel.assertQueue(queueName, {
+        durable: true,
+        autoDelete: false,
+      });
+      await channel.bindQueue(queue.queue, exchangeName, routingKey);
 
-    await channel.assertExchange(exchangeName, "direct");
-    const queue = await channel.assertQueue(queueName, {
-      durable: true,
-      autoDelete: false,
-    });
-    await channel.bindQueue(queue.queue, exchangeName, routingKey);
+      channel.consume(queue.queue, async (msg: ConsumeMessage | null) => {
+        const { receiverEmail, username, verifyLink, resetLink, template } =
+          JSON.parse(msg!.content.toString());
 
-    channel.consume(queue.queue, async (msg: ConsumeMessage | null) => {
-      const { receiverEmail, username, verifyLink, resetLink, template } =
-        JSON.parse(msg!.content.toString());
+        const locals: IEmailLocals = {
+          appLink: `${getConfig().clientUrl}`,
+          appIcon: ``,
+          username,
+          verifyLink,
+          resetLink,
+        };
 
-      const locals: IEmailLocals = {
-        appLink: `${getConfig().clientUrl}`,
-        appIcon: ``,
-        username,
-        verifyLink,
-        resetLink,
-      };
+        const emailUserSender = EmailSender.getInstance();
+        await emailUserSender.sendEmail(template, receiverEmail, locals);
 
-      const emailUserSender = EmailSender.getInstance();
-      await emailUserSender.sendEmail(template, receiverEmail, locals);
-
-      // Acknowledgement
-      channel.ack(msg!);
-    });
+        // Acknowledgement
+        channel.ack(msg!);
+      });
+    }
   } catch (error) {
+    logger.error('Channel is undefined in consumeAuthEmailMessages');
     logger.error(
       `NotificationService EmailConsumer consumeAuthEmailMessages() method error: ${error}`
     );
