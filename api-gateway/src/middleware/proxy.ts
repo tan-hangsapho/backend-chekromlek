@@ -3,7 +3,7 @@ import { createProxyMiddleware, Options } from "http-proxy-middleware";
 import { ROUTE_PATHS } from "../route-defs";
 import { logger } from "../utils/logger";
 import { ClientRequest, IncomingMessage } from "http";
-import getConfig from "../utils/Config";
+import getConfig from "../utils/config";
 import { StatusCode } from "../utils/@const";
 
 interface ProxyConfig {
@@ -19,7 +19,7 @@ const config = getConfig();
 // Define the proxy rules and targets
 const proxyConfigs: ProxyConfig = {
   [ROUTE_PATHS.AUTH_SERVICE]: {
-    target: "http://localhost:3001",
+    target: config.authServiceUrl,
     changeOrigin: true,
     selfHandleResponse: true,
     pathRewrite: (path, _req) => `${ROUTE_PATHS.AUTH_SERVICE}${path}`,

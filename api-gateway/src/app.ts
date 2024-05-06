@@ -14,7 +14,7 @@ import { logger } from "./utils/logger";
 import { StatusCode } from "./utils/@const";
 import { errorHandler } from "./middleware/error-handler";
 import { RegisterRoutes } from "./routes/routes";
-import getConfig from "./utils/Config";
+import getConfig from "./utils/config";
 import { verifyUser } from "./middleware/auth-middleware";
 import unless from "./middleware/unless-route";
   
@@ -40,7 +40,7 @@ import unless from "./middleware/unless-route";
   // );
   
   // Prevent HTTP Parameter Pollution attacks
-//  app.use(hpp());
+ app.use(hpp());
   
   // Prevent Some Security:
   // - Stops browsers from sharing your site's vistor data
