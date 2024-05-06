@@ -79,6 +79,7 @@ const proxyConfigs: ProxyConfig = {
       }
     },
   },
+  
 };
 
 

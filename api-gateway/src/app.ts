@@ -27,17 +27,17 @@ import unless from "./middleware/unless-route";
   // ===================
   app.set("trust proxy", 1);
   app.use(compression())
-  // app.use(
-  //   cookieSession({
-  //     name: "session",
-  //     keys: [`${config.cookieSecretKeyOne}`, `${config.cookieSecretKeyTwo}`],
-  //     maxAge: 24 * 7 * 3600000,
-  //     secure: config.env !== "development", // update with value from config
-  //     ...(config.env !== 'development' && {
-  //       sameSite: 'none'
-  //     })
-  //   })
-  // );
+  app.use(
+    cookieSession({
+      name: "session",
+      keys: [`${config.cookieSecretKeyOne}`, `${config.cookieSecretKeyTwo}`],
+      maxAge: 24 * 7 * 3600000,
+      secure: config.env !== "development", // update with value from config
+      ...(config.env !== 'development' && {
+        sameSite: 'none'
+      })
+    })
+  );
   
   // Prevent HTTP Parameter Pollution attacks
  app.use(hpp());

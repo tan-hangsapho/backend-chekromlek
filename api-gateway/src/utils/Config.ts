@@ -6,7 +6,7 @@ function createConfig(configPath: string) {
   dotenv.config({ path: configPath });
 
   // Validate essential configuration
-  const requiredConfig = ["NODE_ENV", "PORT", "LOG_LEVEL"];
+  const requiredConfig = ["NODE_ENV", "PORT", "LOG_LEVEL",];
   const missingConfig = requiredConfig.filter((key) => !process.env[key]);
 
   if (missingConfig.length > 0) {
@@ -21,8 +21,13 @@ function createConfig(configPath: string) {
     env: process.env.NODE_ENV,
     port: process.env.PORT,
     logLevel: process.env.LOG_LEVEL,
+    rabbitMQ: process.env.RABBITMQ_ENDPOINT,
     clientUrl: process.env.CLIENT_URL,
+    cookieSecretKeyOne: process.env.COOKIE_SECRET_KEY_ONE,
+    cookieSecretKeyTwo: process.env.COOKIE_SECRET_KEY_TWO,
     authServiceUrl: process.env.AUTH_SERVICE_URL,
+    userServiceUrl: process.env.USER_SERVICE_URL,
+    notificationUrl: process.env.NOTIFICATION_SERVICE_URL
   };
 }
 
