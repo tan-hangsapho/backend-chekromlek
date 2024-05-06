@@ -23,6 +23,7 @@ import { IAuthUserMessageDetails } from "../queues/@types/auth.types";
 import axios from "axios";
 import { authChannel } from "../utils/server";
 import dotenv from "dotenv";
+import getConfig from "../utils/config";
 dotenv.config();
 interface LoginRequestBody {
   email: string;
@@ -153,33 +154,43 @@ export class UserAuthController {
       }
     }
   }
+
   @SuccessResponse(StatusCode.OK, "OK")
   @Get("/google")
   public async GoogleAuth() {
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.CLIENT_URI}&response_type=code&scope=profile email`;
+    const config = getConfig();
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
     return { url };
   }
+
   @SuccessResponse(StatusCode.OK, "OK")
   @Get("/google/callback")
   public async GoogleAuthCallback(@Query() code: string) {
     try {
+      const config = getConfig();
       const { data } = await axios.post("https://oauth2.googleapis.com/token", {
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
+        client_id: config.client_id,
+        client_secret: config.client_secret,
         code,
-        redirect_uri: process.env.CLIENT_URL,
+        redirect_uri: config.redirect_url,
         grant_type: "authorization_code",
       });
-      // Fetch user profile
+
+      // Use access_token or id_token to fetch user profile
       const profile = await axios.get(
         "https://www.googleapis.com/oauth2/v1/userinfo",
         {
           headers: { Authorization: `Bearer ${data.access_token}` },
         }
       );
+
+      if (!profile.data.email) {
+        throw new Error("Email is missing from Google profile data");
+      }
       const existingUser = await this.userService.FindUserByEmail({
         email: profile.data.email,
       });
+
       if (existingUser) {
         // User Exists, link the Google account if it's not already linked
         if (!existingUser.googleId) {
@@ -188,32 +199,28 @@ export class UserAuthController {
             update: { googleId: profile.data.id, isVerified: true },
           });
         }
-
         // Now, proceed to log the user in
         const jwtToken = await generateSignature({
           userId: existingUser._id,
         });
-
         return {
           token: jwtToken,
         };
       }
-      // No user exists with this email, create a new user
-      const newUser = await this.userService.SignUp({
-        username: profile.data.name,
-        email: profile.data.email,
-        isVerified: true,
-        googleId: profile.data.id,
-      });
+      const { name, email, id } = profile.data;
 
+      const newUser = await this.userService.SignUp({
+        username: name,
+        email: email,
+        googleId: id,
+        isVerified: true,
+      });
+      await newUser.save();
       const jwtToken = await generateSignature({
         userId: newUser._id,
       });
-
-      return {
-        token: jwtToken,
-      };
-    } catch (error) {
+      return { token: jwtToken };
+    } catch (error: any) {
       throw error;
     }
   }

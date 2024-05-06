@@ -3,7 +3,7 @@ import { userAuthTypes } from "./@Types/userAuth.interface";
 
 const userAuthSchema = new mongoose.Schema(
   {
-    username: { type: String, unique: true },
+    username: { type: String, require: true },
     email: { type: String, required: true, unique: true },
     password: { type: String },
     isVerified: {

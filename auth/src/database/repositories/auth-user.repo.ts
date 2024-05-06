@@ -16,8 +16,7 @@ export class UserAuthRpository {
       }
       //new user and create user
       const newAuthUser = new UserAuthModel(user);
-      const userResult = await newAuthUser.save();
-      return userResult;
+      return await newAuthUser.save();
     } catch (error: any) {
       if (error instanceof CustomError) {
         throw Error;

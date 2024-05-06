@@ -14,6 +14,7 @@ import { RegisterRoutes } from "./routes/routes";
 export const app = express();
 // Security Middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.set("trust proxy", 1);
 // // app.use(ipWhitelist([]))

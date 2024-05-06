@@ -13,6 +13,9 @@ function createConfig(configPath: string) {
     "LOG_LEVEL",
     "RABBITMQ_ENDPOINT",
     "CLIENT_URL",
+    "REDIRECT_URL",
+    "CLIENT_SECRET",
+    "CLIENT_ID",
     "JWT_EXPIRES_IN",
   ];
   const missingConfig = requiredConfig.filter((key) => !process.env[key]);
@@ -29,6 +32,9 @@ function createConfig(configPath: string) {
     port: process.env.PORT,
     mongoUrl: process.env.MONGO_URL,
     logLevel: process.env.LOG_LEVEL,
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+    redirect_url: process.env.REDIRECT_URL,
     rabbitMQ: process.env.RABBITMQ_ENDPOINT,
     clientUrl: process.env.CLIENT_URL,
     apiGateway: process.env.API_GATEWAY,
