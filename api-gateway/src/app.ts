@@ -30,7 +30,7 @@ import unless from "./middleware/unless-route";
   app.use(
     cookieSession({
       name: "session",
-      keys: [`${config.cookieSecretKeyOne}`, `${config.cookieSecretKeyTwo}`],
+      keys: [`${getConfig().cookieSecretKeyOne}`, `${config.cookieSecretKeyTwo}`],
       maxAge: 24 * 7 * 3600000,
       secure: config.env !== "development", // update with value from config
       ...(config.env !== 'development' && {
