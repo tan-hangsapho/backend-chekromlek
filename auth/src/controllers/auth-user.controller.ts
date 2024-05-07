@@ -192,7 +192,6 @@ export class UserAuthController {
       });
 
       if (existingUser) {
-        // User Exists, link the Google account if it's not already linked
         if (!existingUser.googleId) {
           await this.userService.UpdateUser({
             id: existingUser.id,
