@@ -35,14 +35,13 @@ export class UserAuthService {
         newUserAuth = { ...newUserAuth, password: hashedPassword };
       }
       const existingUser = await this.userRepo.FindUser({ email: user.email });
-
+ 
       if (existingUser) {
         throw new CustomError(
           "Email address is already in use",
           StatusCode.Found
         );
       }
-
       const savedUser = await this.userRepo.createAuthUser(newUserAuth);
       return savedUser;
     } catch (error) {

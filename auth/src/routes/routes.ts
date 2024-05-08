@@ -40,11 +40,11 @@ export function RegisterRoutes(app: Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.post('/auth/signup',
+        app.post('/v1/auth/signup',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.SignUpUser)),
 
-            function UserAuthController_SignUpUser(request: ExRequest, response: ExResponse, next: any) {
+            async function UserAuthController_SignUpUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     reqBody: {"in":"body","name":"reqBody","required":true,"ref":"SignUpRequestBody"},
             };
@@ -57,7 +57,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              templateService.apiHandler({
+              await templateService.apiHandler({
                 methodName: 'SignUpUser',
                 controller,
                 response,
@@ -70,11 +70,11 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/auth/verify',
+        app.get('/v1/auth/verify',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.VerifyEmail)),
 
-            function UserAuthController_VerifyEmail(request: ExRequest, response: ExResponse, next: any) {
+            async function UserAuthController_VerifyEmail(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     token: {"in":"query","name":"token","required":true,"dataType":"string"},
             };
@@ -87,7 +87,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              templateService.apiHandler({
+              await templateService.apiHandler({
                 methodName: 'VerifyEmail',
                 controller,
                 response,
@@ -100,11 +100,11 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/auth/login',
+        app.post('/v1/auth/login',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.LoginWithEmail)),
 
-            function UserAuthController_LoginWithEmail(request: ExRequest, response: ExResponse, next: any) {
+            async function UserAuthController_LoginWithEmail(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"LoginRequestBody"},
             };
@@ -117,7 +117,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              templateService.apiHandler({
+              await templateService.apiHandler({
                 methodName: 'LoginWithEmail',
                 controller,
                 response,
@@ -130,11 +130,11 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/auth/google',
+        app.get('/v1/auth/google',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.GoogleAuth)),
 
-            function UserAuthController_GoogleAuth(request: ExRequest, response: ExResponse, next: any) {
+            async function UserAuthController_GoogleAuth(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
             };
 
@@ -146,7 +146,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              templateService.apiHandler({
+              await templateService.apiHandler({
                 methodName: 'GoogleAuth',
                 controller,
                 response,
@@ -159,11 +159,11 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/auth/google/callback',
+        app.get('/v1/auth/google/callback',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.GoogleAuthCallback)),
 
-            function UserAuthController_GoogleAuthCallback(request: ExRequest, response: ExResponse, next: any) {
+            async function UserAuthController_GoogleAuthCallback(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     code: {"in":"query","name":"code","required":true,"dataType":"string"},
             };
@@ -176,7 +176,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              templateService.apiHandler({
+              await templateService.apiHandler({
                 methodName: 'GoogleAuthCallback',
                 controller,
                 response,

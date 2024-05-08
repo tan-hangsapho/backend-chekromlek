@@ -13,10 +13,10 @@ import compression from "compression";
 import { logger } from "./utils/logger";
 import { StatusCode } from "./utils/@const";
 import { errorHandler } from "./middleware/error-handler";
-import { RegisterRoutes } from "./routes/routes";
 import getConfig from "./utils/config";
 import { verifyUser } from "./middleware/auth-middleware";
 import unless from "./middleware/unless-route";
+import { createProxyMiddleware } from "http-proxy-middleware";
   
   const app = express();
   
@@ -63,12 +63,7 @@ import unless from "./middleware/unless-route";
   
   // Hide Express Server Information
   app.disable("x-powered-by");
-  
-  // ===================
-  // Gateway Health Routes
-  // ===================
-  RegisterRoutes(app);
-  
+   
   // ===================
   // JWT Middleware
   // ===================
@@ -79,6 +74,12 @@ import unless from "./middleware/unless-route";
   // ===================
   applyProxy(app);
   
+  // app.use (ROUTE_PATHS.AUTH_SERVICE, createProxyMiddleware({
+  //   target: config.authServiceUrl,
+  //   changeOrigin: true,
+  //   pathRewrite: (path, _req) => `${ROUTE_PATHS.AUTH_SERVICE}${path}`,
+  // }))
+
   // ====================
   // Global Error Handler
   // ====================
