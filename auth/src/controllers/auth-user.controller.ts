@@ -35,7 +35,7 @@ interface SignUpRequestBody {
   password: string;
 }
 
-@Route("auth")
+@Route("v1/auth")
 @Tags("Authentication")
 export class UserAuthController {
   private userService: UserAuthService;
@@ -159,7 +159,14 @@ export class UserAuthController {
   @Get("/google")
   public async GoogleAuth() {
     const config = getConfig();
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+      config.client_id
+    }&redirect_uri=${
+      config.redirect_url
+    }&response_type=code&scope=${encodeURIComponent("profile email")}`;
+
+    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
+    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
     return { url };
   }
 
@@ -175,10 +182,9 @@ export class UserAuthController {
         redirect_uri: config.redirect_url,
         grant_type: "authorization_code",
       });
-
       // Use access_token or id_token to fetch user profile
       const profile = await axios.get(
-        "https://www.googleapis.com/oauth2/v1/userinfo",
+        "https://www.googleapis.com/oauth2/v3/userinfo",
         {
           headers: { Authorization: `Bearer ${data.access_token}` },
         }
@@ -221,6 +227,12 @@ export class UserAuthController {
       return { token: jwtToken };
     } catch (error: any) {
       throw error;
+
+      // console.error("Error in Google Auth Callback:", error.message);
+      // return {
+      //   status: "error",
+      //   message: error.message,
+      // };
     }
   }
 }

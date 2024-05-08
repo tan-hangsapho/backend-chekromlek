@@ -1,52 +1,65 @@
-import express, { Request, Response } from 'express';
-import  cors from "cors"
-import {createProxyMiddleware} from "http-proxy-middleware"
-import compression  from "compression"
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-require("dotenv").config()
+import { logInit, logger } from "./utils/logger";
+import app from "./app";
+import getConfig from "./utils/config";
+import fs from "fs";
+import path from "path";
 
-const app = express();
-const port = process.env.PORT; 
-console.log("port:" , port);
+// READ FILE JWT PUBLIC KEY FIRST
+export const publicKey = fs.readFileSync(
+  path.join(__dirname, "../public_key.pem"),
+  "utf-8"
+);
 
-app.use(express.json());
+// RUN THE SERVER
+async function run() {
+  try {
+    const config = getConfig();
 
-// Enable rate limiting middleware
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
-  });
+    // Activate Logger
+    logInit({ env: process.env.NODE_ENV, logLevel: config.logLevel });
 
-app.use(limiter);
+    // Start Server
+    logger.info(`Gateway server has started with process id ${process.pid}`);
 
-// enable cors middleware
-app.use(cors())
+    const server = app.listen(config.port, () => {
+      logger.info(`Gateway server is listening on port: ${config.port}`);
+    });
 
-// Enable compression with specific options
-app.use(compression({ level: 6 })); // Specify compression level (0-9)
+    const exitHandler = async () => {
+      if (server) {
+        server.close(async () => {
+          logger.info("server closed!");
+          logger.info("mongodb disconnected!");
 
-// Enable helmet middleware
-app.use(helmet());
+          // Gracefully Terminate
+          process.exit(1); // terminate the process due to error
+        });
+      } else {
+        process.exit(1);
+      }
+    };
 
+    const unexpectedErrorHandler = (error: unknown) => {
+      logger.error("unhandled error", { error });
+      exitHandler();
+    };
 
+    // Error that might occur duing execution that not caught by any try/catch blocks
+    process.on("uncaughtException", unexpectedErrorHandler); // Syncronous
+    process.on("unhandledRejection", unexpectedErrorHandler); // Asyncronous
 
+    // A termination signal typically sent from OS or other software (DOCKER, KUBERNETES)
+    process.on("SIGTERM", () => {
+      logger.info("SIGTERM received");
+      if (server) {
+        // Stop the server from accepting new request but keeps existing connection open until all ongoin request are done
+        server.close();
+      }
+    });
+  } catch (error) {
+    logger.error("Gateway Service Failed", { error });
+    process.exit(1);
+  }
+}
 
-
-// http://127.0.0.1:3000/chat-service => http://127.0.0.1:3003 (chat service)
-
-app.use("/chat-service" , createProxyMiddleware({
-    target: "http://127.0.0.1:3003",
-    changeOrigin: true,
-    pathRewrite: {
-        "^/chat-service": ""
-    }
-}))
-
-app.get('/', (req: Request, res: Response) => {
-    res.json({mssg:" Hello from Express and TypeScript!"});
-});
-
-app.listen(port, () => {
-    console.log(`API Gateway Server listening at http://127.0.0.1:${port}`);
-});
+run();

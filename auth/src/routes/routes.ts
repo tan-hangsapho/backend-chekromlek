@@ -40,7 +40,7 @@ export function RegisterRoutes(app: Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.post('/auth/signup',
+        app.post('/v1/auth/signup',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.SignUpUser)),
 
@@ -70,7 +70,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/auth/verify',
+        app.get('/v1/auth/verify',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.VerifyEmail)),
 
@@ -100,7 +100,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.post('/auth/login',
+        app.post('/v1/auth/login',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.LoginWithEmail)),
 
@@ -130,7 +130,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/auth/google',
+        app.get('/v1/auth/google',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.GoogleAuth)),
 
@@ -159,7 +159,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/auth/google/callback',
+        app.get('/v1/auth/google/callback',
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.GoogleAuthCallback)),
 

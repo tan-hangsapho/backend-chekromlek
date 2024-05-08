@@ -55,7 +55,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/auth/signup": {
+		"/v1/auth/signup": {
 			"post": {
 				"operationId": "SignUpUser",
 				"responses": {
@@ -85,7 +85,7 @@
 				}
 			}
 		},
-		"/auth/verify": {
+		"/v1/auth/verify": {
 			"get": {
 				"operationId": "VerifyEmail",
 				"responses": {
@@ -128,7 +128,7 @@
 				]
 			}
 		},
-		"/auth/login": {
+		"/v1/auth/login": {
 			"post": {
 				"operationId": "LoginWithEmail",
 				"responses": {
@@ -168,7 +168,7 @@
 				}
 			}
 		},
-		"/auth/google": {
+		"/v1/auth/google": {
 			"get": {
 				"operationId": "GoogleAuth",
 				"responses": {
@@ -198,7 +198,7 @@
 				"parameters": []
 			}
 		},
-		"/auth/google/callback": {
+		"/v1/auth/google/callback": {
 			"get": {
 				"operationId": "GoogleAuthCallback",
 				"responses": {
