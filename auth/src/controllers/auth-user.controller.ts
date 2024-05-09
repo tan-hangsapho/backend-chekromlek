@@ -212,12 +212,11 @@ export class UserAuthController {
           token: jwtToken,
         };
       }
-      const { name, email, id } = profile.data;
 
       const newUser = await this.userService.SignUp({
-        username: name,
-        email: email,
-        googleId: id,
+        username: profile.data.name,
+        email: profile.data.email,
+        googleId: profile.data._id,
         isVerified: true,
       });
       await newUser.save();

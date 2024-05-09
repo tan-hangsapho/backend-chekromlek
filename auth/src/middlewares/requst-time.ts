@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 export const requestTime = (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {
