@@ -81,6 +81,8 @@ export class UserAuthController {
   public async VerifyEmail(
     @Query() token: string
   ): Promise<{ message: string; token: string }> {
+    
+
     try {
       // Verify the email token
       const user = await this.userService.VerifyEmailToken({ token });
@@ -155,6 +157,7 @@ export class UserAuthController {
     }
   }
 
+  //  Google Authentication
   @SuccessResponse(StatusCode.OK, "OK")
   @Get("/google")
   public async GoogleAuth() {

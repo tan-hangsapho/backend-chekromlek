@@ -35,7 +35,7 @@ export class UserAuthService {
         newUserAuth = { ...newUserAuth, password: hashedPassword };
       }
       const existingUser = await this.userRepo.FindUser({ email: user.email });
- 
+
       if (existingUser) {
         throw new CustomError(
           "Email address is already in use",
@@ -114,6 +114,7 @@ export class UserAuthService {
   // 3. If the user exist then mark the user to true
   // 4. save user in database
   // 5. delete the token from database
+
   async VerifyEmailToken({ token }: { token: string }) {
     const isTokenExisting =
       await this.verificationRepo.FindAccountVerificationToken({ token });
@@ -123,6 +124,7 @@ export class UserAuthService {
         StatusCode.BadRequest
       );
     }
+
     const users = await this.userRepo.FindUserById({
       id: isTokenExisting.userId.toString(),
     });
