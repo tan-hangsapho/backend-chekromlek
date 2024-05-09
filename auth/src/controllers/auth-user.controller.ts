@@ -81,6 +81,8 @@ export class UserAuthController {
   public async VerifyEmail(
     @Query() token: string
   ): Promise<{ message: string; token: string }> {
+    
+
     try {
       // Verify the email token
       const user = await this.userService.VerifyEmailToken({ token });
@@ -155,11 +157,17 @@ export class UserAuthController {
     }
   }
 
+  //  Google Authentication
   @SuccessResponse(StatusCode.OK, "OK")
   @Get("/google")
   public async GoogleAuth() {
     const config = getConfig();
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+      config.client_id
+    }&redirect_uri=${
+      config.redirect_url
+    }&response_type=code&scope=${encodeURIComponent("profile email")}`;
+
     return { url };
   }
 
@@ -175,10 +183,10 @@ export class UserAuthController {
         redirect_uri: config.redirect_url,
         grant_type: "authorization_code",
       });
-
+      console.log("error:", data);
       // Use access_token or id_token to fetch user profile
       const profile = await axios.get(
-        "https://www.googleapis.com/oauth2/v1/userinfo",
+        "https://www.googleapis.com/oauth2/v3/userinfo",
         {
           headers: { Authorization: `Bearer ${data.access_token}` },
         }
@@ -192,7 +200,6 @@ export class UserAuthController {
       });
 
       if (existingUser) {
-        // User Exists, link the Google account if it's not already linked
         if (!existingUser.googleId) {
           await this.userService.UpdateUser({
             id: existingUser.id,
@@ -222,6 +229,7 @@ export class UserAuthController {
       return { token: jwtToken };
     } catch (error: any) {
       throw error;
+
     }
   }
 }

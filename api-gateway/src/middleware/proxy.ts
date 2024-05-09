@@ -19,7 +19,7 @@ const config = getConfig();
 // Define the proxy rules and targets
 const proxyConfigs: ProxyConfig = {
   "/v1/auth": {
-    target: "http://localhost:3001",
+    target: config.authServiceUrl,
     changeOrigin: true,
     selfHandleResponse: true,
     pathRewrite: (path, _req) => `/v1/auth/${path}`,
@@ -79,6 +79,7 @@ const proxyConfigs: ProxyConfig = {
       }
     },
   },
+  // "v1/auth/login": {},
 };
 
 
