@@ -35,7 +35,7 @@ interface SignUpRequestBody {
   password: string;
 }
 
-@Route("auth")
+@Route("v1/auth")
 @Tags("Authentication")
 export class UserAuthController {
   private userService: UserAuthService;

@@ -18,11 +18,11 @@ const config = getConfig();
 
 // Define the proxy rules and targets
 const proxyConfigs: ProxyConfig = {
-  [ROUTE_PATHS.AUTH_SERVICE]: {
-    target: config.authServiceUrl,
+  "/v1/auth": {
+    target: "http://localhost:3001",
     changeOrigin: true,
     selfHandleResponse: true,
-    pathRewrite: (path, _req) => `${ROUTE_PATHS.AUTH_SERVICE}${path}`,
+    pathRewrite: (path, _req) => `/v1/auth/${path}`,
     on: {
       proxyReq: (proxyReq: ClientRequest, req: IncomingMessage, _res: Response) => {
         logger.info(`Proxied request URL: ${proxyReq.protocol}//${proxyReq.host}${proxyReq.path}`);
@@ -79,7 +79,6 @@ const proxyConfigs: ProxyConfig = {
       }
     },
   },
-  
 };
 
 
