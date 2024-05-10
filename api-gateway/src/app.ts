@@ -13,7 +13,7 @@ import compression from "compression";
 import { logger } from "./utils/logger";
 import { StatusCode } from "./utils/@const";
 import { errorHandler } from "./middleware/error-handler";
-import getConfig from "./utils/config";
+import getConfig from "./utils/Config";
 import { verifyUser } from "./middleware/auth-middleware";
 import unless from "./middleware/unless-route";
 import { createProxyMiddleware } from "http-proxy-middleware";

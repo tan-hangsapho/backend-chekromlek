@@ -1,6 +1,6 @@
 import { logInit, logger } from "./utils/logger";
 import app from "./app";
-import getConfig from "./utils/config";
+import getConfig from "./utils/Config";
 import fs from "fs";
 import path from "path";
 
