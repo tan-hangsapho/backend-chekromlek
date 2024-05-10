@@ -48,11 +48,11 @@ export class UserAuthRpository {
     id: string;
     update: AuthUpdateUserRepository;
   }) {
-    const isExist = await this.FindUserById({ id });
-    if (!isExist) {
-      throw new CustomError("User does not exist", StatusCode.NotFound);
-    }
     try {
+      const isExist = await this.FindUserById({ id });
+      if (!isExist) {
+        throw new CustomError("User does not exist", StatusCode.NotFound);
+      }
       const existingUser = await UserAuthModel.findByIdAndUpdate(id, update, {
         new: true,
       });
