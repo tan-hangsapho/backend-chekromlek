@@ -17,11 +17,13 @@ import getConfig from "./utils/Config";
 import { verifyUser } from "./middleware/auth-middleware";
 import unless from "./middleware/unless-route";
 import { createProxyMiddleware } from "http-proxy-middleware";
+import { ROUTE_PATHS } from "./route-defs";
   
   const app = express();
   
   const config = getConfig();
-  
+
+
   // ===================
   // Security Middleware
   // ===================
@@ -73,12 +75,6 @@ import { createProxyMiddleware } from "http-proxy-middleware";
   // Proxy Routes
   // ===================
   applyProxy(app);
-  
-  // app.use (ROUTE_PATHS.AUTH_SERVICE, createProxyMiddleware({
-  //   target: config.authServiceUrl,
-  //   changeOrigin: true,
-  //   pathRewrite: (path, _req) => `${ROUTE_PATHS.AUTH_SERVICE}${path}`,
-  // }))
 
   // ====================
   // Global Error Handler
