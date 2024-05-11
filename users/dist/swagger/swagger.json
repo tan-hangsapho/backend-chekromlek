@@ -7,12 +7,9 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"mongoose.Types.ObjectId": {
-				"type": "string"
-			},
 			"IUser": {
 				"properties": {
-					"_id": {
+					"authId": {
 						"type": "string"
 					},
 					"username": {
@@ -26,13 +23,13 @@
 					},
 					"favorites": {
 						"items": {
-							"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+							"type": "string"
 						},
 						"type": "array"
 					},
 					"questions": {
 						"items": {
-							"$ref": "#/components/schemas/mongoose.Types.ObjectId"
+							"type": "string"
 						},
 						"type": "array"
 					},
@@ -92,7 +89,7 @@
 			"post": {
 				"operationId": "SaveProfile",
 				"responses": {
-					"200": {
+					"201": {
 						"description": "Created",
 						"content": {
 							"application/json": {

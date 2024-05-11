@@ -1,9 +1,11 @@
 import { IUser } from '../database/models/user.model';
 import validateInput from '@users/middlewares/validate-input';
+import { consumerMessage } from '@users/queue/user.consumer';
 import { UserSaveSchema, UserUpdateSchema } from '@users/schema/user.schema';
 import { UserService } from '@users/services/user.service';
 import { StatusCode } from '@users/utils/consts';
 import { logger } from '@users/utils/logger';
+import { userChannel } from '@users/utils/server';
 import {
   Body,
   Middlewares,
@@ -28,6 +30,7 @@ export class UserController {
   ): Promise<any> {
     try {
       const newUser = await this.userService.CreateUser(reqBody);
+      await consumerMessage(userChannel);
       return {
         message: 'User profile create successfully',
         data: newUser,
