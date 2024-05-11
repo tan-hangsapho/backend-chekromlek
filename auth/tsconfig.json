@@ -16,5 +16,9 @@
     "noUnusedParameters": true,
     "alwaysStrict": true,
     "pretty": true
+  },
+  "paths": {
+    "@auth/*": ["src/*"],
+    "tsoa": ["node_modules/tsoa/dist"]
   }
 }

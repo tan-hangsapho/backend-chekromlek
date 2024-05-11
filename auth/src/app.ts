@@ -1,14 +1,13 @@
-import swaggerUi from "swagger-ui-express";
-import * as swaggerDocument from "../dist/swagger/swagger.json";
 import express, { Request, Response, NextFunction } from "express";
-import errorHandler from "./middlewares/error-handle";
-// import { postRouter } from "./routes/post-question,route";
-import getConfig from "./utils/config";
 import hpp from "hpp";
 import helmet from "helmet";
 import cors from "cors";
-import loggerMiddleware from "./middlewares/logger-handle";
+import swaggerUi from "swagger-ui-express";
+import * as swaggerDocument from "../dist/swagger/swagger.json";
 import { RegisterRoutes } from "./routes/routes";
+import loggerMiddleware from "./middlewares/logger-handle";
+import getConfig from "./utils/config";
+import errorHandler from "./middlewares/error-handle";
 
 // app running
 export const app = express();

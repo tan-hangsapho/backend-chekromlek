@@ -95,7 +95,6 @@ export class UserAuthController {
       });
 
       if (!userDetail) {
-    
         logger.error(
           `AuthController VerifyEmail() method error: user not found`
         );
@@ -107,7 +106,6 @@ export class UserAuthController {
         type: "auth",
       };
 
-   
       await publishDirectMessage(
         authChannel,
         "Chekromlek-user-update",
@@ -165,6 +163,8 @@ export class UserAuthController {
       config.redirect_url
     }&response_type=code&scope=${encodeURIComponent("profile email")}`;
 
+    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
+    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
     return { url };
   }
 
@@ -180,7 +180,6 @@ export class UserAuthController {
         redirect_uri: config.redirect_url,
         grant_type: "authorization_code",
       });
-      console.log("error:", data);
       // Use access_token or id_token to fetch user profile
       const profile = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
@@ -211,12 +210,11 @@ export class UserAuthController {
           token: jwtToken,
         };
       }
-      const { name, email, id } = profile.data;
 
       const newUser = await this.userService.SignUp({
-        username: name,
-        email: email,
-        googleId: id,
+        username: profile.data.name,
+        email: profile.data.email,
+        googleId: profile.data._id,
         isVerified: true,
       });
       await newUser.save();
