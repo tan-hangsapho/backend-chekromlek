@@ -81,8 +81,6 @@ export class UserAuthController {
   public async VerifyEmail(
     @Query() token: string
   ): Promise<{ message: string; token: string }> {
-    
-
     try {
       // Verify the email token
       const user = await this.userService.VerifyEmailToken({ token });
@@ -95,22 +93,21 @@ export class UserAuthController {
       const userDetail = await this.userService.FindUserByEmail({
         email: user.email,
       });
+
       if (!userDetail) {
+    
         logger.error(
           `AuthController VerifyEmail() method error: user not found`
         );
-        throw new APIError(
-          `Something went wrong`,
-          StatusCode.InternalServerError
-        );
+        throw new APIError(`User not found`, StatusCode.NotFound); // Use a specific status code
       }
-
       const messageDetails: IAuthUserMessageDetails = {
         username: userDetail.username,
         email: userDetail.email,
         type: "auth",
       };
 
+   
       await publishDirectMessage(
         authChannel,
         "Chekromlek-user-update",
@@ -229,7 +226,6 @@ export class UserAuthController {
       return { token: jwtToken };
     } catch (error: any) {
       throw error;
-
     }
   }
 }
