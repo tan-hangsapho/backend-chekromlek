@@ -1,7 +1,7 @@
 export interface UserUpdate {
-  username: string;
-  profile: string;
+  username?: string;
+  profile?: string;
   bio?: string;
-  work: string;
+  work?: string;
   gender?: string;
 }

@@ -1,26 +1,26 @@
 import mongoose from 'mongoose';
 
 export interface IUser {
-  authId?: string;
-  username: string;
-  email: string;
-  profile: string;
+  _id?: string;
+  username?: string;
+  email?: string;
+  profile?: string;
   favorites?: string[];
   questions?: string[];
   bio?: string;
-  work: string;
-  answers: number;
-  posts: number;
+  work?: string;
+  answers?: number;
+  posts?: number;
   gender?: string;
   createdAt?: Date | string;
 }
 
 const userSchema = new mongoose.Schema(
   {
-    authId: { type: mongoose.Schema.Types.ObjectId, ref: 'Auth' },
+    useId: { type: mongoose.Schema.Types.ObjectId, ref: 'Auth' },
     username: { type: String, require: true },
     email: { type: String, required: true, unique: true },
-    profile: { type: String, require: true },
+    profile: { type: String },
     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
     questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }],
     bio: { type: String },

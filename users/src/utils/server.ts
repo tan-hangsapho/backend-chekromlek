@@ -3,7 +3,6 @@ import { app } from '../app';
 import getConfig from './config';
 import connectMongoDB from './dbconnection';
 import { logInit, logger } from './logger';
-import { createQueueConnection } from '@users/queue/connection';
 export let userChannel: Channel;
 
 export async function run() {
@@ -16,7 +15,6 @@ export async function run() {
     // Activate Database
     const mongodb = connectMongoDB.getInstance();
     await mongodb.connect({ url: config.mongoUrl as string });
-    userChannel = (await createQueueConnection()) as Channel;
 
     // Start Server
     const server = app.listen(config.port, () => {

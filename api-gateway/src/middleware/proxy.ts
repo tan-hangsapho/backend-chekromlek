@@ -68,7 +68,8 @@ const proxyConfigs: ProxyConfig = {
 
             // Store JWT in session
             if (responseBody.token) {
-              (req as Request & { session: SessionWithJwt }).session.jwt = responseBody.token;
+              (req as Request & { session: SessionWithJwt }).session.jwt =
+                responseBody.token;
             }
 
             // Modify response to send only the message to the client
@@ -99,7 +100,7 @@ const proxyConfigs: ProxyConfig = {
         }
       },
     },
-  },  
+  },
   [ROUTE_PATHS.AUTH_SERVICE_LOGIN]: {
     target: config.authServiceUrl,
     changeOrigin: true,
@@ -145,7 +146,8 @@ const proxyConfigs: ProxyConfig = {
 
             // Store JWT in session
             if (responseBody.token) {
-              (req as Request & { session: SessionWithJwt }).session.jwt = responseBody.token;
+              (req as Request & { session: SessionWithJwt }).session.jwt =
+                responseBody.token;
             }
 
             // Modify response to send only the message to the client
@@ -176,7 +178,7 @@ const proxyConfigs: ProxyConfig = {
         }
       },
     },
-  }, 
+  },
   [ROUTE_PATHS.AUTH_SERVICE_GOOGLE]: {
     target: config.authServiceUrl,
     changeOrigin: true,
@@ -222,12 +224,14 @@ const proxyConfigs: ProxyConfig = {
 
             // Store JWT in session
             if (responseBody.token) {
-              (req as Request & { session: SessionWithJwt }).session.jwt = responseBody.token;
+              (req as Request & { session: SessionWithJwt }).session.jwt =
+                responseBody.token;
             }
 
             // // Modify response to send only the message to the client
             res.json({ message: responseBody });
           } catch (error) {
+            logger.info("error:", error);
             return res.status(500).json({ message: "Error parsing response" });
           }
         });
@@ -253,14 +257,11 @@ const proxyConfigs: ProxyConfig = {
         }
       },
     },
-  }, 
-
+  },
 };
 
-logger.info(config.authServiceUrl)
-logger.info(ROUTE_PATHS.AUTH_SERVICE_SIGNUP)
-
-
+logger.info(config.authServiceUrl);
+logger.info(ROUTE_PATHS.AUTH_SERVICE_SIGNUP);
 
 const applyProxy = (app: express.Application) => {
   Object.keys(proxyConfigs).forEach((context: string) => {

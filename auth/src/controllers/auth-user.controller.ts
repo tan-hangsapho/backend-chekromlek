@@ -35,6 +35,10 @@ interface SignUpRequestBody {
   password: string;
 }
 
+export interface UserData {
+  username: string;
+  email: string;
+}
 @Route("v1/auth")
 @Tags("Authentication")
 export class UserAuthController {
@@ -106,6 +110,11 @@ export class UserAuthController {
         type: "auth",
       };
 
+      await axios.post("http://localhost:4000/v1/users/", {
+        useId: user._id,
+        username: userDetail.username,
+        email: userDetail.email,
+      });
       await publishDirectMessage(
         authChannel,
         "Chekromlek-user-update",
@@ -157,13 +166,13 @@ export class UserAuthController {
   @Get("/google")
   public async GoogleAuth() {
     const config = getConfig();
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
-      config.client_id
-    }&redirect_uri=${
-      config.redirect_url
-    }&response_type=code&scope=${encodeURIComponent("profile email")}`;
+    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+    //   config.client_id
+    // }&redirect_uri=${
+    //   config.redirect_url
+    // }&response_type=code&scope=${encodeURIComponent("profile email")}`;
 
-    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
     // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
     return { url };
   }
