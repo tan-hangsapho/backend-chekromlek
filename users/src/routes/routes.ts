@@ -14,16 +14,16 @@ const models: TsoaRoute.Models = {
     "IUser": {
         "dataType": "refObject",
         "properties": {
-            "authId": {"dataType":"string"},
-            "username": {"dataType":"string","required":true},
-            "email": {"dataType":"string","required":true},
-            "profile": {"dataType":"string","required":true},
+            "_id": {"dataType":"string"},
+            "username": {"dataType":"string"},
+            "email": {"dataType":"string"},
+            "profile": {"dataType":"string"},
             "favorites": {"dataType":"array","array":{"dataType":"string"}},
             "questions": {"dataType":"array","array":{"dataType":"string"}},
             "bio": {"dataType":"string"},
-            "work": {"dataType":"string","required":true},
-            "answers": {"dataType":"double","required":true},
-            "posts": {"dataType":"double","required":true},
+            "work": {"dataType":"string"},
+            "answers": {"dataType":"double"},
+            "posts": {"dataType":"double"},
             "gender": {"dataType":"string"},
             "createdAt": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"string"}]},
         },
@@ -46,7 +46,7 @@ export function RegisterRoutes(app: Router) {
 
             async function UserController_SaveProfile(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    reqBody: {"in":"body","name":"reqBody","required":true,"dataType":"intersection","subSchemas":[{"ref":"IUser"},{"dataType":"nestedObjectLiteral","nestedProperties":{"authId":{"dataType":"string","required":true}}}]},
+                    reqBody: {"in":"body","name":"reqBody","required":true,"dataType":"intersection","subSchemas":[{"ref":"IUser"},{"dataType":"nestedObjectLiteral","nestedProperties":{"useId":{"dataType":"string","required":true}}}]},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

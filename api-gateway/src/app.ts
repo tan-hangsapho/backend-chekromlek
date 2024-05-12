@@ -1,8 +1,4 @@
-import express, {
-    Response,
-    Request,
-    NextFunction,
-  } from "express";
+import express, { Response, Request, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import applyProxy from "./middleware/proxy";
@@ -17,81 +13,85 @@ import getConfig from "./utils/Config";
 import { verifyUser } from "./middleware/auth-middleware";
 import unless from "./middleware/unless-route";
 import { createProxyMiddleware } from "http-proxy-middleware";
-  
-  const app = express();
-  
-  const config = getConfig();
-  
-  // ===================
-  // Security Middleware
-  // ===================
-  app.set("trust proxy", 1);
-  app.use(compression())
-  app.use(
-    cookieSession({
-      name: "session",
-      keys: [`${getConfig().cookieSecretKeyOne}`, `${config.cookieSecretKeyTwo}`],
-      maxAge: 24 * 7 * 3600000,
-      secure: config.env !== "development", // update with value from config
-      ...(config.env !== 'development' && {
-        sameSite: 'none'
-      })
-    })
-  );
-  
-  // Prevent HTTP Parameter Pollution attacks
- app.use(hpp());
-  
-  // Prevent Some Security:
-  // - Stops browsers from sharing your site's vistor data
-  // - Stops your website from being displayed in a frame
-  // - Prevent XSS, etc.
-  app.use(helmet());
-  
-  // Only Allow Specific Origin to Access API Gateway (Frontend)
-  app.use(
-    cors({
-      origin: getConfig().env === 'development' ? '*' : [config.clientUrl as string],
-      credentials: true, // attach token from client
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
-    })
-  );
-  
-  // Apply Limit Request
-  applyRateLimit(app);
-  
-  // Hide Express Server Information
-  app.disable("x-powered-by");
-   
-  // ===================
-  // JWT Middleware
-  // ===================
-  app.use(unless('/v1/auth', verifyUser))
-  
-  // ===================
-  // Proxy Routes
-  // ===================
-  applyProxy(app);
-  
-  // app.use (ROUTE_PATHS.AUTH_SERVICE, createProxyMiddleware({
-  //   target: config.authServiceUrl,
-  //   changeOrigin: true,
-  //   pathRewrite: (path, _req) => `${ROUTE_PATHS.AUTH_SERVICE}${path}`,
-  // }))
+import { ROUTE_PATHS } from "./route-defs";
 
-  // ====================
-  // Global Error Handler
-  // ====================
-  app.use("*", (req: Request, res: Response, _next: NextFunction) => {
-    const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
-    logger.error(`${fullUrl} endpoint does not exist`);
-    res
-      .status(StatusCode.NotFound)
-      .json({ message: "The endpoint called does not exist." });
-  });
-  
-  app.use(errorHandler);
-  
-  export default app;
-  
+const app = express();
+
+const config = getConfig();
+
+// ===================
+// Security Middleware
+// ===================
+app.set("trust proxy", 1);
+app.use(compression());
+app.use(
+  cookieSession({
+    name: "session",
+    keys: [`${getConfig().cookieSecretKeyOne}`, `${config.cookieSecretKeyTwo}`],
+    maxAge: 24 * 7 * 3600000,
+    secure: config.env !== "development", // update with value from config
+    ...(config.env !== "development" && {
+      sameSite: "none",
+    }),
+  })
+);
+
+// Prevent HTTP Parameter Pollution attacks
+app.use(hpp());
+
+// Prevent Some Security:
+// - Stops browsers from sharing your site's vistor data
+// - Stops your website from being displayed in a frame
+// - Prevent XSS, etc.
+app.use(helmet());
+
+// Only Allow Specific Origin to Access API Gateway (Frontend)
+app.use(
+  cors({
+    origin:
+      getConfig().env === "development" ? "*" : [config.clientUrl as string],
+    credentials: true, // attach token from client
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+// Apply Limit Request
+applyRateLimit(app);
+
+// Hide Express Server Information
+app.disable("x-powered-by");
+
+// ===================
+// JWT Middleware
+// ===================
+app.use(unless("/v1/auth", verifyUser));
+
+// ===================
+// Proxy Routes
+// ===================
+applyProxy(app);
+// app.use(
+//   "/v1/auth/signup",
+//   createProxyMiddleware({
+//     target: config.authServiceUrl,
+//     changeOrigin: true,
+//     selfHandleResponse: true,
+//     pathRewrite: () => `${ROUTE_PATHS.AUTH_SERVICE_SIGNUP}`,
+//   })
+// );
+
+// ====================
+// Global Error Handler
+// ====================
+app.use("*", (req: Request, res: Response, _next: NextFunction) => {
+  const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
+  logger.error(`${fullUrl} endpoint does not exist`);
+  res
+    .status(StatusCode.NotFound)
+    .json({ message: "The endpoint called does not exist." });
+});
+
+app.use(errorHandler);
+
+export default app;

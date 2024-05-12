@@ -10,6 +10,7 @@ const errorHandler = (
   _next: NextFunction
 ): Response => {
   logger.error(`ErrorHandler() method error: ${err}`);
+  console.log('error:', err);
   // If the error is an instance of our own throw ERROR
   if (err instanceof BaseCustomError) {
     return res.status(err.getStatusCode()).json(err.serializeErrorOutput());

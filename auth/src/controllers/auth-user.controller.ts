@@ -35,6 +35,10 @@ interface SignUpRequestBody {
   password: string;
 }
 
+export interface UserData {
+  username: string;
+  email: string;
+}
 @Route("v1/auth")
 @Tags("Authentication")
 export class UserAuthController {
@@ -81,8 +85,6 @@ export class UserAuthController {
   public async VerifyEmail(
     @Query() token: string
   ): Promise<{ message: string; token: string }> {
-    
-
     try {
       // Verify the email token
       const user = await this.userService.VerifyEmailToken({ token });
@@ -95,22 +97,24 @@ export class UserAuthController {
       const userDetail = await this.userService.FindUserByEmail({
         email: user.email,
       });
+
       if (!userDetail) {
         logger.error(
           `AuthController VerifyEmail() method error: user not found`
         );
-        throw new APIError(
-          `Something went wrong`,
-          StatusCode.InternalServerError
-        );
+        throw new APIError(`User not found`, StatusCode.NotFound); // Use a specific status code
       }
-
       const messageDetails: IAuthUserMessageDetails = {
         username: userDetail.username,
         email: userDetail.email,
         type: "auth",
       };
 
+      await axios.post("http://localhost:4000/v1/users/", {
+        useId: user._id,
+        username: userDetail.username,
+        email: userDetail.email,
+      });
       await publishDirectMessage(
         authChannel,
         "Chekromlek-user-update",
@@ -162,13 +166,13 @@ export class UserAuthController {
   @Get("/google")
   public async GoogleAuth() {
     const config = getConfig();
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
-      config.client_id
-    }&redirect_uri=${
-      config.redirect_url
-    }&response_type=code&scope=${encodeURIComponent("profile email")}`;
+    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+    //   config.client_id
+    // }&redirect_uri=${
+    //   config.redirect_url
+    // }&response_type=code&scope=${encodeURIComponent("profile email")}`;
 
-    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
     // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
     return { url };
   }
@@ -229,12 +233,6 @@ export class UserAuthController {
       return { token: jwtToken };
     } catch (error: any) {
       throw error;
-
-      // console.error("Error in Google Auth Callback:", error.message);
-      // return {
-      //   status: "error",
-      //   message: error.message,
-      // };
     }
   }
 }
