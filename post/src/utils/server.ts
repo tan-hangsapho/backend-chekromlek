@@ -1,49 +1,45 @@
-
-import { startQueue } from '@notifications/queues/connection';
-import getConfig from './config';
-import EmailSender from './email-sender';
-import { logInit, logger } from './logger';
-import NodemailerEmailApi from './nodemailer-email-api';
+import { Channel } from 'amqplib';
 import { app } from '../app';
+import getConfig from './config';
+import connectMongoDB from './db-connection';
+import { logInit, logger } from './logger';
+export let userChannel: Channel;
 
 export async function run() {
   try {
-    const config = getConfig();
+    const config = getConfig(process.env.NODE_ENV);
 
     // Activate Logger
-    logInit({ env: process.env.NODE_ENV, logLevel: config.logLevel });
+    logInit({ env: config.env, logLevel: config.logLevel });
 
-    // Activate Email Sender with EmailAPI [NodeMailer]
-    const emailSender = EmailSender.getInstance();
-    emailSender.activate();
-    emailSender.setEmailApi(new NodemailerEmailApi());
+    // Activate Database
+    const mongodb = connectMongoDB.getInstance();
+    await mongodb.connect({ url: config.mongoUrl as string });
 
-    // Activate RabbitMQ
-    await startQueue();
-
-    logger.info(
-      `Worker with process id of ${process.pid} on notification server has started.`
-    );
     // Start Server
     const server = app.listen(config.port, () => {
-      logger.info(`Notification Server is listening on port: ${config.port}`);
+      logger.info(`Server is listening on port: ${config.port}`);
     });
 
     const exitHandler = async () => {
       if (server) {
         server.close(async () => {
           logger.info('server closed!');
+          await mongodb.disconnect();
+          logger.info('mongodb disconnected!');
 
           // Gracefully Terminate
           process.exit(1); // terminate the process due to error
         });
       } else {
+        await mongodb.disconnect(); // In case the server isn't running but DB needs to be disconnected
+        logger.info('MongoDB disconnected.');
         process.exit(1);
       }
     };
 
     const unexpectedErrorHandler = (error: unknown) => {
-      logger.error(`unhandled error, ${error}`);
+      logger.error('unhandled error', { error });
       exitHandler();
     };
 
@@ -60,8 +56,7 @@ export async function run() {
       }
     });
   } catch (error) {
-    console.log(error);
-    logger.error(`Failed to initialize application ${error}`);
+    logger.error('Failed to initialize application', { error });
     process.exit(1);
   }
 }

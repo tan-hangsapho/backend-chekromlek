@@ -1,7 +1,8 @@
 import getConfig from '@notifications/utils/config';
-import { logger } from '@notifications/utils/logger';
 import client, { Channel, Connection } from 'amqplib';
 import { consumeAuthEmailMessages } from './email-consumer';
+import { logger } from '@notifications/utils/logger';
+
 
 export async function createQueueConnection(): Promise<Channel | undefined> {
   try {
@@ -35,6 +36,11 @@ export async function startQueue(): Promise<void> {
     const emailChannel: Channel = (await createQueueConnection()) as Channel;
     await consumeAuthEmailMessages(emailChannel);
   } catch (error) {
-    throw error;
+    logger.error(
+      `NotificationService startQueue() method error: ${error}`
+    );
+    throw error; // Re-throw for handling at a higher level
+  } finally {
+    await closeQueueConnection(); // Ensure connection is closed
   }
 }

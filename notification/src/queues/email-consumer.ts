@@ -12,6 +12,7 @@ import EmailSender from '@notifications/utils/email-sender';
 // 4. Check if Queue Exist, If Not Create Once
 // 5. Bind the Exchange to Queue by Routing Key
 // 6. Consumer: Send Email When there is a message from Queue
+
 export async function consumeAuthEmailMessages(
   channel: Channel
 ): Promise<void> {
@@ -32,15 +33,14 @@ export async function consumeAuthEmailMessages(
       await channel.bindQueue(queue.queue, exchangeName, routingKey);
 
       channel.consume(queue.queue, async (msg: ConsumeMessage | null) => {
-        const { receiverEmail, username, resetLink, template } = JSON.parse(
-          msg!.content.toString()
-        );
+        const { receiverEmail, username, resetLink, template, token } =
+          JSON.parse(msg!.content.toString());
 
         const locals: IEmailLocals = {
           appLink: `${getConfig().clientUrl}`,
-          appIcon: `email/verifyEmail/img/logo.svg`,
+          appIcon: ``,
           username,
-          verifyLink: `${getConfig().clientUrl}`,
+          verifyLink: `http://localhost:3003/verify?token=${token}`,
           resetLink,
         };
 
