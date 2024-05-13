@@ -138,7 +138,6 @@ export class UserAuthController {
 
       return { message: "User verify email successfully", token: jwtToken };
     } catch (error: unknown) {
-      console.log(error);
       throw error;
     }
   }
