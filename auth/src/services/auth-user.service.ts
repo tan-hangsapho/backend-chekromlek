@@ -12,11 +12,11 @@ import { generateEmailVerificationToken } from "../utils/verification-token";
 import { UserSignInSchemaType } from "../schemas/@types/auth.types";
 import { VerificationRepository } from "../database/repositories/verification-request.repo";
 import APIError from "../errors/api-error";
-import DuplicateError from "../errors/duplicate-error";
 import { logger } from "../utils/logger";
 import { publishDirectMessage } from "../queues/auth-producer";
 import { authChannel } from "../utils/server";
 import { UserSignInResult } from "./@types/auth-user.types";
+import DuplicateError from "../errors/duplicate-error";
 
 export class UserAuthService {
   private userRepo: UserAuthRpository;
@@ -39,11 +39,14 @@ export class UserAuthService {
       });
 
       if (existingUser) {
-        throw new CustomError(
-          "Email address is already in use",
-          StatusCode.Found
-        );
+        if (!existingUser.isVerified) {
+          throw new DuplicateError(
+            "That email already signed up. Please verify!!"
+          );
+        }
+        throw new DuplicateError("You can't sign up with that email!!");
       }
+
       const savedUser = await this.userRepo.createAuthUser(newUserAuth);
       return savedUser;
     } catch (error: unknown) {

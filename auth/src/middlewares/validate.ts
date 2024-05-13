@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import InvalidInputError from "../errors/invalid-input-error";
 
 export const validate = (schema: ZodSchema) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     try {
       schema.parse(req.body);
       next();
