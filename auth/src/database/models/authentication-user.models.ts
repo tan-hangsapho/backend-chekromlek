@@ -4,7 +4,7 @@ import { userAuthTypes } from "./@Types/userAuth.interface";
 const userAuthSchema = new mongoose.Schema(
   {
     username: { type: String, require: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, unique: true },
     password: { type: String },
     isVerified: {
       type: Boolean,
@@ -23,12 +23,18 @@ const userAuthSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    facebookId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
   },
   {
     toJSON: {
       transform(_doc, ret) {
         delete ret.password;
         delete ret.googleId;
+        delete ret.facebookId;
         delete ret.__v;
       },
     },

@@ -1,6 +1,6 @@
 export interface userAuthTypes extends AuthUserTypeDoc {
   username: string;
-  email: string;
+  email?: string;
   isVerified?: boolean;
   facebookId?: string;
   googleId?: string;
@@ -10,7 +10,7 @@ export interface userAuthTypes extends AuthUserTypeDoc {
 }
 
 export interface AuthUserTypeDoc {
-  username: string;
-  email: string;
+  username?: string;
+  email?: string;
   password?: string;
 }

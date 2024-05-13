@@ -24,6 +24,8 @@ import axios from "axios";
 import { authChannel } from "../utils/server";
 import dotenv from "dotenv";
 import getConfig from "../utils/config";
+import DuplicateError from "../errors/duplicate-error";
+import BaseCustomError from "../errors/base-custom-error";
 dotenv.config();
 interface LoginRequestBody {
   email: string;
@@ -76,8 +78,19 @@ export class UserAuthController {
         message: "Sign up successfully. Please verify your email.",
         data: newUser,
       };
-    } catch (error) {
-      throw error;
+    } catch (error: unknown) {
+      if (error instanceof DuplicateError) {
+        return {
+          message: "Email already exist.",
+        };
+      } else if (error instanceof BaseCustomError) {
+        return {
+          message:
+            "User has not been verified. Please check your email for the verification link.",
+        };
+      } else {
+        throw error;
+      }
     }
   }
   @SuccessResponse(StatusCode.OK, "OK")
@@ -95,7 +108,7 @@ export class UserAuthController {
       });
 
       const userDetail = await this.userService.FindUserByEmail({
-        email: user.email,
+        email: user.email ?? "",
       });
 
       if (!userDetail) {
@@ -124,7 +137,8 @@ export class UserAuthController {
       );
 
       return { message: "User verify email successfully", token: jwtToken };
-    } catch (error) {
+    } catch (error: unknown) {
+      console.log(error);
       throw error;
     }
   }
@@ -149,7 +163,7 @@ export class UserAuthController {
       return {
         token: jwtToken,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       // Handle specific error types
       if (error instanceof CustomError) {
         // More fine-grained status codes based on CustomError type
@@ -166,14 +180,7 @@ export class UserAuthController {
   @Get("/google")
   public async GoogleAuth() {
     const config = getConfig();
-    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
-    //   config.client_id
-    // }&redirect_uri=${
-    //   config.redirect_url
-    // }&response_type=code&scope=${encodeURIComponent("profile email")}`;
-
     const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=profile email`;
-    // const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.client_id}&redirect_uri=${config.redirect_url}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
     return { url };
   }
 
@@ -232,6 +239,79 @@ export class UserAuthController {
       });
       return { token: jwtToken };
     } catch (error: any) {
+      throw error;
+    }
+  }
+  @SuccessResponse(StatusCode.OK, "OK")
+  @Get("/facebook")
+  public async FacebookAuth(): Promise<{ url: string }> {
+    try {
+      const config = getConfig();
+      const url = `https://www.facebook.com/v11.0/dialog/oauth?client_id=${config.facebook_id}&redirect_uri=${config.facebook_url}`;
+      return { url };
+    } catch (error: unknown) {
+      throw error;
+    }
+  }
+  @SuccessResponse(StatusCode.OK, "OK")
+  @Get("/facebook/callback")
+  public async FacebookAuthCallback(
+    @Query() code: string
+  ): Promise<{ token: string }> {
+    try {
+      const config = getConfig();
+      const { data } = await axios.get(
+        `https://graph.facebook.com/v13.0/oauth/access_token`,
+        {
+          params: {
+            client_id: config.facebook_id,
+            client_secret: config.facebook_secret,
+            code,
+            redirect_uri: config.facebook_url,
+          },
+        }
+      );
+
+      const { access_token } = data;
+
+      // Use access_token to fetch user profile
+      const { data: profile } = await axios.get(
+        `https://graph.facebook.com/v13.0/me`,
+        {
+          params: {
+            fields: "name,picture",
+            access_token,
+          },
+        }
+      );
+
+      const existingUser = await this.userService.FindUserByEmail({
+        email: profile.email,
+      });
+
+      if (existingUser) {
+        if (!existingUser.facebookId) {
+          await this.userService.UpdateUser({
+            id: existingUser.id,
+            update: { facebookId: profile.id, isVerified: true },
+          });
+        }
+        // Proceed to log the user in
+        const jwtToken = await generateSignature({ userId: existingUser._id });
+        return { token: jwtToken };
+      }
+
+      const newUser = await this.userService.SignUp({
+        username: profile.name,
+        profile: profile.picture.data.url,
+        facebookId: profile.id,
+        isVerified: true,
+      });
+      await newUser.save();
+      const jwtToken = await generateSignature({ userId: newUser._id });
+      return { token: jwtToken };
+    } catch (error: any) {
+      logger.error(`FacebookAuthCallback error: ${error.message}`);
       throw error;
     }
   }
