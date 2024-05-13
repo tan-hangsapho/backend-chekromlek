@@ -1,13 +1,13 @@
-import express, { Request, Response, NextFunction } from "express";
 import hpp from "hpp";
 import helmet from "helmet";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "../dist/swagger/swagger.json";
 import { RegisterRoutes } from "./routes/routes";
-import loggerMiddleware from "./middlewares/logger-handle";
 import getConfig from "./utils/config";
 import errorHandler from "./middlewares/error-handle";
+import express from "express";
+import loggerMiddleware from "./middlewares/logger-handle";
 
 // app running
 export const app = express();
@@ -34,12 +34,10 @@ app.use(express.static("public"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // routes
 RegisterRoutes(app);
-// app.use("/", userRouter);
-// app.use("/", postRouter);
-// middleware
-app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
-  next(new Error(`page could be not found!`));
-});
-app.use(loggerMiddleware);
 
+// middleware
+// app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
+//   next(new Error(`page could be not found!`));
+// });
+app.use(loggerMiddleware);
 app.use(errorHandler);

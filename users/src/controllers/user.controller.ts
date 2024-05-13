@@ -1,11 +1,10 @@
 import { IUser } from '../database/models/user.model';
 import validateInput from '@users/middlewares/validate-input';
-import { consumerMessage } from '@users/queue/user.consumer';
 import { UserSaveSchema, UserUpdateSchema } from '@users/schema/user.schema';
 import { UserService } from '@users/services/user.service';
 import { StatusCode } from '@users/utils/consts';
 import { logger } from '@users/utils/logger';
-import { userChannel } from '@users/utils/server';
+// import axios from 'axios';
 import {
   Body,
   Middlewares,
@@ -26,16 +25,23 @@ export class UserController {
   @Post('/')
   @Middlewares(validateInput(UserSaveSchema))
   public async SaveProfile(
-    @Body() reqBody: IUser & { authId: string }
+    @Body() reqBody: IUser & { useId: string }
   ): Promise<any> {
     try {
+      // const authResponse = await axios.get(
+      //   `http://localhost:3001/v1/auth/verify?token=${reqBody.authId}`
+      // );
+      // console.log(authResponse);
+
       const newUser = await this.userService.CreateUser(reqBody);
-      await consumerMessage(userChannel);
+
       return {
         message: 'User profile create successfully',
         data: newUser,
       };
     } catch (error) {
+      console.log('Error: ', error);
+
       logger.error(`Service method error: ${error}`);
       throw error;
     }

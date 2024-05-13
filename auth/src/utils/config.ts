@@ -16,7 +16,11 @@ function createConfig(configPath: string) {
     "REDIRECT_URL",
     "CLIENT_SECRET",
     "CLIENT_ID",
+    "FACEBOOK_CLIENT_ID",
+    "FACEBOOK_CLIENT_SECRET",
+    "FACEBOOK_URL",
     "JWT_EXPIRES_IN",
+    "USER_SERVICE_URL",
   ];
   const missingConfig = requiredConfig.filter((key) => !process.env[key]);
 
@@ -37,8 +41,12 @@ function createConfig(configPath: string) {
     redirect_url: process.env.REDIRECT_URL,
     rabbitMQ: process.env.RABBITMQ_ENDPOINT,
     clientUrl: process.env.CLIENT_URL,
+    facebook_id: process.env.FACEBOOK_CLIENT_ID,
+    facebook_secret: process.env.FACEBOOK_CLIENT_SECRET,
+    facebook_url: process.env.FACEBOOK_URL,
     apiGateway: process.env.API_GATEWAY,
     jwtExpiresIn: process.env.JWT_EXPIRES_IN,
+    user_service_url: process.env.USER_SERVICE_URL,
   };
 }
 

@@ -9,7 +9,7 @@
 		"schemas": {
 			"IUser": {
 				"properties": {
-					"authId": {
+					"_id": {
 						"type": "string"
 					},
 					"username": {
@@ -62,14 +62,6 @@
 						]
 					}
 				},
-				"required": [
-					"username",
-					"email",
-					"profile",
-					"work",
-					"answers",
-					"posts"
-				],
 				"type": "object",
 				"additionalProperties": false
 			}
@@ -111,12 +103,12 @@
 									},
 									{
 										"properties": {
-											"authId": {
+											"useId": {
 												"type": "string"
 											}
 										},
 										"required": [
-											"authId"
+											"useId"
 										],
 										"type": "object"
 									}
