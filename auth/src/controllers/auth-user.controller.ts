@@ -25,7 +25,7 @@ import { authChannel } from "../utils/server";
 import dotenv from "dotenv";
 import getConfig from "../utils/config";
 import DuplicateError from "../errors/duplicate-error";
-import BaseCustomError from "../errors/base-custom-error";
+
 dotenv.config();
 interface LoginRequestBody {
   email: string;
@@ -78,18 +78,19 @@ export class UserAuthController {
         message: "Sign up successfully. Please verify your email.",
         data: newUser,
       };
-    } catch (error: unknown) {
+    } catch (error: any) {
       if (error instanceof DuplicateError) {
+        // Handle custom error
         return {
-          message: "Email already exist.",
+          message: error.message,
+          statusCode: error.statusCode,
         };
-      } else if (error instanceof BaseCustomError) {
+      } else {
         return {
-          message:
-            "User has not been verified. Please check your email for the verification link.",
+          message: error.message,
+          statusCode: error.statusCode,
         };
       }
-      throw error;
     }
   }
   @SuccessResponse(StatusCode.OK, "OK")

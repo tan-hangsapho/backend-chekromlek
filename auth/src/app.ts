@@ -7,6 +7,7 @@ import { RegisterRoutes } from "./routes/routes";
 import getConfig from "./utils/config";
 import errorHandler from "./middlewares/error-handle";
 import express from "express";
+import loggerMiddleware from "./middlewares/logger-handle";
 
 // app running
 export const app = express();
@@ -38,6 +39,5 @@ RegisterRoutes(app);
 // app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
 //   next(new Error(`page could be not found!`));
 // });
-// app.use(loggerMiddleware);
-
+app.use(loggerMiddleware);
 app.use(errorHandler);
