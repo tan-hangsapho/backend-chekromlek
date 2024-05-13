@@ -4,17 +4,13 @@ import { UserAuthModel } from "../models/authentication-user.models";
 import {
   AuthCreateUserRepository,
   AuthUpdateUserRepository,
+  UserSignUp,
 } from "./@types/auth-user.types";
 
 export class UserAuthRpository {
   // Create User Account
-  async createAuthUser(user: AuthCreateUserRepository) {
+  async createAuthUser(user: UserSignUp) {
     try {
-      const existingUser = await this.FindUser({ email: user.email });
-      if (existingUser) {
-        throw new CustomError("Email already exist", StatusCode.Found);
-      }
-      //new user and create user
       const newAuthUser = new UserAuthModel(user);
       return await newAuthUser.save();
     } catch (error: any) {

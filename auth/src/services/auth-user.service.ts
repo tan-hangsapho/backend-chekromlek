@@ -1,4 +1,3 @@
-import { userAuthTypes } from "../database/models/@Types/userAuth.interface";
 import VerificationModel from "../database/models/verification-request.model";
 import { UserAuthRpository } from "../database/repositories/auth-user.repo";
 import CustomError from "../errors/custom-erorrs";
@@ -17,6 +16,7 @@ import DuplicateError from "../errors/duplicate-error";
 import { logger } from "../utils/logger";
 import { publishDirectMessage } from "../queues/auth-producer";
 import { authChannel } from "../utils/server";
+import { UserSignInResult } from "./@types/auth-user.types";
 
 export class UserAuthService {
   private userRepo: UserAuthRpository;
@@ -26,7 +26,7 @@ export class UserAuthService {
     // this.verification = new VerificationService();
     this.verificationRepo = new VerificationRepository();
   }
-  async SignUp(user: userAuthTypes) {
+  async SignUp(user: UserSignInResult) {
     try {
       const hashedPassword =
         user.password && (await generatePassword(user.password));
@@ -34,7 +34,9 @@ export class UserAuthService {
       if (hashedPassword) {
         newUserAuth = { ...newUserAuth, password: hashedPassword };
       }
-      const existingUser = await this.userRepo.FindUser({ email: user.email });
+      const existingUser = await this.userRepo.FindUser({
+        email: user.email ?? "",
+      });
 
       if (existingUser) {
         throw new CustomError(
@@ -44,10 +46,10 @@ export class UserAuthService {
       }
       const savedUser = await this.userRepo.createAuthUser(newUserAuth);
       return savedUser;
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof DuplicateError) {
         const existedUser = await this.userRepo.FindUser({
-          email: user.email,
+          email: user.email ?? "",
         });
         if (!existedUser?.isVerified) {
           const token = await this.verificationRepo.FindVerificationTokenById({
@@ -103,7 +105,7 @@ export class UserAuthService {
         throw new CustomError("User does not exist!", StatusCode.NotFound);
       }
       return await verification.save();
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
@@ -188,7 +190,7 @@ export class UserAuthService {
     try {
       const user = await this.userRepo.FindUser({ email });
       return user;
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
@@ -200,7 +202,7 @@ export class UserAuthService {
       }
       const updatedUser = await this.userRepo.UpdateUserbyId({ id, update });
       return updatedUser;
-    } catch (error) {
+    } catch (error: unknown) {
       throw error;
     }
   }
