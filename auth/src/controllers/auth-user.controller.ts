@@ -88,9 +88,8 @@ export class UserAuthController {
           message:
             "User has not been verified. Please check your email for the verification link.",
         };
-      } else {
-        throw error;
       }
+      throw error;
     }
   }
   @SuccessResponse(StatusCode.OK, "OK")
