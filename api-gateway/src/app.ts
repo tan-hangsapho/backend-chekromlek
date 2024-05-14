@@ -12,8 +12,6 @@ import { errorHandler } from "./middleware/error-handler";
 import getConfig from "./utils/Config";
 import { verifyUser } from "./middleware/auth-middleware";
 import unless from "./middleware/unless-route";
-import { createProxyMiddleware } from "http-proxy-middleware";
-import { ROUTE_PATHS } from "./route-defs";
 
 const app = express();
 
@@ -71,15 +69,6 @@ app.use(unless("/v1/auth", verifyUser));
 // Proxy Routes
 // ===================
 applyProxy(app);
-// app.use(
-//   "/v1/auth/signup",
-//   createProxyMiddleware({
-//     target: config.authServiceUrl,
-//     changeOrigin: true,
-//     selfHandleResponse: true,
-//     pathRewrite: () => `${ROUTE_PATHS.AUTH_SERVICE_SIGNUP}`,
-//   })
-// );
 
 // ====================
 // Global Error Handler
