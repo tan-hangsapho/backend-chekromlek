@@ -1,10 +1,10 @@
 
-import { startQueue } from '@notifications/queues/connection';
 import getConfig from './config';
 import EmailSender from './email-sender';
 import { logInit, logger } from './logger';
 import NodemailerEmailApi from './nodemailer-email-api';
 import { app } from '../app';
+import { startQueue } from '@notifications/queues/connection';
 
 export async function run() {
   try {
