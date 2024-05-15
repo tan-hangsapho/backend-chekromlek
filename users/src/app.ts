@@ -47,7 +47,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(' ')[1];
     console.log('token', publicKey);
-
+    console.log('token: ', token);
     const payload = verify(token, publicKey);
     console.log('payload', payload);
     // @ts-ignore

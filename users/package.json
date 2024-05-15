@@ -55,6 +55,7 @@
     "@types/node": "^20.12.11",
     "@types/on-headers": "^1.0.3",
     "@types/swagger-ui-express": "^4.1.6",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5",
     "typescript-transform-paths": "^3.4.7"
