@@ -63,6 +63,7 @@ export class UserAuthController {
         userId: newUser._id.toString(),
       });
       const messageDetails = {
+        username: newUser.username,
         receiverEmail: newUser.email,
         verifyLink: `${verificationToken.token}`,
         template: "verifyEmail",
@@ -124,14 +125,15 @@ export class UserAuthController {
       };
 
       await axios.post("http://localhost:4000/v1/users/", {
-        useId: user._id,
+        userId: user._id,
         username: userDetail.username,
         email: userDetail.email,
+        createdAt: new Date(),
       });
       await publishDirectMessage(
         authChannel,
         "Chekromlek-user-update",
-        "user-applier",
+        "user-update",
         JSON.stringify(messageDetails),
         "User details sent to user service"
       );

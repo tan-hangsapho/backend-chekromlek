@@ -9,8 +9,7 @@ COPY src ./src
 # Installs the latest version of npm globally in the containe
 RUN npm install -g npm@latest\
 # Installs dependencies based on the package-lock.json file.
-RUN npm ci && npm run build
-
+RUN npm ci && npm install ts-node && npm run build
 FROM node:21-alpine3.18
 
 WORKDIR /app
