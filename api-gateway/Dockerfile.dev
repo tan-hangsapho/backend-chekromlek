@@ -4,11 +4,13 @@ FROM node:21-alpine3.18
 WORKDIR /app
 COPY package.json ./
 COPY tsconfig.json ./
+COPY public_key.pem /app/public_key.pem
+
 COPY src ./src
 
-RUN ls -a
+RUN npm install 
 
-RUN npm install && npm install -g nodemon
+
 
 EXPOSE 3000
 

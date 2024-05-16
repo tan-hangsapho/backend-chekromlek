@@ -7,12 +7,17 @@ WORKDIR /app
 COPY package.json ./
 COPY tsconfig.json ./
 COPY src ./src
-
+COPY dist ./dist
+COPY private_key.pem /app/private_key.pem
 
 # List all files and directories to verify the build directory
 RUN ls -a
+
 # Installs the latest version of npm globally in the containe
-RUN npm install && npm install -g nodemon
+RUN npm install 
+
+# Install nodemon globally
+RUN npm install -g nodemon
 
 # Informs Docker that the container will listen on port 3000 at runtime.
 EXPOSE 3001

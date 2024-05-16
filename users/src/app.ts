@@ -11,10 +11,10 @@ import { StatusCode } from '@users/utils/consts';
 import { logger } from '@users/utils/logger';
 import swaggerUi from 'swagger-ui-express';
 import * as swaggerDocument from '../dist/swagger/swagger.json';
-import { publicKey } from './server';
 import { errorHandler } from '@users/middlewares/error-handler';
 import getConfig from '@users/utils/config';
 import { RegisterRoutes } from './routes/routes';
+import { private_key } from './server';
 
 export const app = express();
 
@@ -46,9 +46,9 @@ app.use(loggerMiddleware);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(' ')[1];
-    console.log('token', publicKey);
+    console.log('token', private_key);
     console.log('token: ', token);
-    const payload = verify(token, publicKey);
+    const payload = verify(token, private_key);
     console.log('payload', payload);
     // @ts-ignore
     req.currentUser = payload;

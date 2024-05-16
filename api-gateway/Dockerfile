@@ -25,4 +25,4 @@ COPY --from=builder /app/build ./build
 # Informs Docker that the container will listen on port 3000 at runtime.
 EXPOSE 3000
 # Specifies the command to run when the container starts.
-CMD [ "npm", "run", "start" ]
+CMD [ "npm", "run", "start:dev" ]

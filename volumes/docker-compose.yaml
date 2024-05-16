@@ -70,6 +70,18 @@ services:
     depends_on:
       - rabbitmq # Wait for RabbitMQ to start before starting this service
 
+   # 6. Post - Post service
+  post:
+    container_name: post_container
+    build:
+      context: ../post # Path to the post service's code
+      dockerfile: Dockerfile.dev  # Use the Dockerfile created for the "post" service
+    restart: always
+    ports:
+      - 3005:3005 # Map port 3005 of the container to port 3005 on the host
+    env_file: ../post/configs/.env # Environment variables file
+
+
 # Secrets - Securely store sensitive data
 secrets:
   jwt_public_key:

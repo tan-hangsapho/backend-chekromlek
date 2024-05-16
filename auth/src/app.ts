@@ -32,7 +32,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "200mb" }));
 app.use(express.static("public"));
 
-//  testings swagger routes
+// Swagger Documentation (testing route)
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // routes
 RegisterRoutes(app);

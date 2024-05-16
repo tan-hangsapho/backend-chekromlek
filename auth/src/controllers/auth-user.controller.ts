@@ -112,6 +112,9 @@ export class UserAuthController {
         email: user.email ?? "",
       });
 
+      
+    
+
       if (!userDetail) {
         logger.error(
           `AuthController VerifyEmail() method error: user not found`

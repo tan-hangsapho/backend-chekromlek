@@ -1,3 +1,4 @@
+import { verificationToken } from '@users/middlewares/author-token-validation';
 import { IUser } from '../database/models/user.model';
 import validateInput from '@users/middlewares/validate-input';
 import { UserSaveSchema, UserUpdateSchema } from '@users/schema/user.schema';
@@ -48,6 +49,7 @@ export class UserController {
   }
   @SuccessResponse(StatusCode.OK, 'OK')
   @Put('/:userId')
+  @Middlewares(verificationToken)
   @Middlewares(validateInput(UserUpdateSchema))
   public async UpdateProfile(
     @Body() reqBody: IUser,
