@@ -54,7 +54,7 @@
 </details>
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+### About The Project
 
 We believe in the potential of every high schooler and university student to shape a brighter future.That why we generate the platform to let them communicate and sharing education on it. Everyone often struggle with certain problems,  and need additional help.So, we assist them by let them asking their problems in our platform and  get responding by another user to help refine the solution of problems.
 
@@ -62,7 +62,7 @@ We believe in the potential of every high schooler and university student to sha
 
 ### Built With
 
-This section lists major frameworks and libraries used in the Learnwithkru project:
+This section lists major frameworks and libraries used in the Chekromlek project:
 
 * [Node.js][Node.js-url]
 * [TypeScript][TypeScript-url]
@@ -75,7 +75,6 @@ This section lists major frameworks and libraries used in the Learnwithkru proje
 [Node.js-url]: https://nodejs.org/
 [TypeScript-url]: https://www.typescriptlang.org/
 [Express-url]: https://expressjs.com/
-
 [MongoDB-url]: https://www.mongodb.com/
 
 ## Getting Started
@@ -129,9 +128,10 @@ If you prefer to set up the project without Docker, follow these commands:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
- 
+## User
 
 ### our platform 
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
