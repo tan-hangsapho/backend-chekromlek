@@ -26,7 +26,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="http://localhost:3001/login/logo.svg&w=640&q=75" alt="Logo" width="90" height="80">
+    <img src="https://chekromlek.com/login/logo.svg" alt="Logo" width="90" height="80">
   </a>
   <h1 align="center">Chekromlek</h1>
 </div>
