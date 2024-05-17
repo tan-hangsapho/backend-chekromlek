@@ -28,7 +28,7 @@
   <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="https://learnwithkru.com/_next/image?url=%2FLogos%2FKruLogo.png&w=640&q=75" alt="Logo" width="90" height="80">
   </a>
-  <h1 align="center">Project Learnwithkru</h1>
+  <h1 align="center">Chekromlek</h1>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -171,8 +171,8 @@ _For more examples and detailed instructions, please refer to the [Documentation
 <!-- CONTACT -->
 ## Contact
 
-Smoeury Songvat - (https://www.facebook.com/vath.goodboi) - learnwithkru287@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+
+Project Link:(https://github.com/tan-hangsapho/backend-chekromlek)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
