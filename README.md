@@ -1,3 +1,104 @@
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a name="readme-top"></a>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
+
+
+
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+
+
+
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="https://learnwithkru.com/_next/image?url=%2FLogos%2FKruLogo.png&w=640&q=75" alt="Logo" width="90" height="80">
+  </a>
+  <h1 align="center">Project Learnwithkru</h1>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+In a digitally interconnected world, the demand for personalized education has never been higher. Students and learners of all ages are seeking tailored learning experiences that cater to their individual needs, preferences, and schedules. Meanwhile, educators are looking for flexible platforms that allow them to reach a broader audience and provide impactful, one-on-one instruction. Our project aims to bridge this gap by creating an innovative platform designed to connect students and teachers for personalized, one-on-one educational experiences, similar to the well-established Preply platform.
+
+Our platform leverages cutting-edge technology to facilitate seamless interactions between students and educators. By providing a user-friendly interface, robust search functionalities, and secure communication tools, we empower learners to find the perfect teacher who can guide them through their educational journey. Teachers, in turn, gain access to a diverse pool of students, allowing them to expand their reach and impact.
+
+Whether it's mastering a new language, excelling in academic subjects, or acquiring new skills, our platform is dedicated to making personalized education accessible and effective. Join us in revolutionizing the way education is delivered and received, creating meaningful connections that foster growth, learning, and success.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Built With
+
+This section lists major frameworks and libraries used in the Learnwithkru project:
+
+* ![Node.js][Node.js]
+* [![TypeScript][TypeScript]][TypeScript-url]
+* [![Express][Express.js]][Express-url]
+* [![MongoDB][MongoDB]][MongoDB-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- LINKS -->
+[Node.js-url]: https://nodejs.org/
+[TypeScript-url]: https://www.typescriptlang.org/
+[Express-url]: https://expressjs.com/
+
+[MongoDB-url]: https://www.mongodb.com/
+
+## Getting Started
+
+### With Docker
+
+Follow these steps to set up this project locally using Docker.
+
+#### Prerequisites
+
+Ensure you have the following software installed before proceeding:
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+#### Setup Steps
+
+1. Navigate to the `volumes` folder:
+
+    ```sh
+    cd volumes
 2. Build and run the Docker containers:
 
         docker-compose up --build
@@ -28,7 +129,7 @@ If you prefer to set up the project without Docker, follow these commands:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
+Change =>
 <!-- USAGE EXAMPLES -->
 ## Usage
 
