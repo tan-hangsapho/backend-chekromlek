@@ -22,11 +22,11 @@
 
 
 
-<!-- PROJECT LOGO -->
+<!-- PROJECT LOGO  http://localhost:3001/login/logo.svg-->
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="https://learnwithkru.com/_next/image?url=%2FLogos%2FKruLogo.png&w=640&q=75" alt="Logo" width="90" height="80">
+    <img src="http://localhost:3001/login/logo.svg&w=640&q=75" alt="Logo" width="90" height="80">
   </a>
   <h1 align="center">Chekromlek</h1>
 </div>
