@@ -258,11 +258,11 @@ const proxyConfigs: ProxyConfig = {
       },
     },
   }, 
-  [ROUTE_PATHS.AUTH_SERVICE_GOOGLE]: {
+  [ROUTE_PATHS.AUTH_SERVICE_VERIFY]: {
     target: config.authServiceUrl,
     changeOrigin: true,
     selfHandleResponse: true,
-    pathRewrite: () => `${ROUTE_PATHS.AUTH_SERVICE_GOOGLE}`,
+    pathRewrite: { [`^${ROUTE_PATHS.AUTH_SERVICE_VERIFY}`]: '/verify' },
     on: {
       proxyReq: (
         proxyReq: ClientRequest,
@@ -303,12 +303,14 @@ const proxyConfigs: ProxyConfig = {
 
             // Store JWT in session
             if (responseBody.token) {
-              (req as Request & { session: SessionWithJwt }).session.jwt = responseBody.token;
+              (req as Request & { session: SessionWithJwt }).session.jwt =
+                responseBody.token;
             }
 
             // // Modify response to send only the message to the client
             res.json({ message: responseBody });
           } catch (error) {
+            logger.info("error:", error);
             return res.status(500).json({ message: "Error parsing response" });
           }
         });

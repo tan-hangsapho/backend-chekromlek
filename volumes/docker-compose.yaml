@@ -11,6 +11,12 @@ services:
     ports:
       - "5672:5672" # AMQP protocol port
       - "15672:15672" # Management UI port
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    
 
   # 2. Gateway - API Gateway service
   gateway:
@@ -24,10 +30,12 @@ services:
     env_file: ../api-gateway/configs/.env # Environment variables file
     environment:
       - DOCKER_ENV=true # Indicate that it's a Docker environment
-      - AUTH_SERVICE_URL=http://localhost:3001 # URL for the Auth service
-      - USER_SERVICE_URL=http://localhost:4000 # URL for the User Profile service
+      - AUTH_SERVICE_URL=http://auth:3001 # URL for the Auth service
+      - USER_SERVICE_URL=http://user-profile:4000 # URL for the User Profile service
     secrets:
       - jwt_public_key # Use JWT public key secret
+    volumes:
+      - ../api-gateway/src:/app/src # Mount the gateway code directory
 
   # 3. Auth - Authentication service
   auth:
@@ -45,6 +53,8 @@ services:
       - jwt_private_key # Use JWT private key secret
     depends_on:
       - rabbitmq # Wait for RabbitMQ to start before starting this service
+    volumes:
+      - ../auth/src:/app/src # Mount the auth service code directory
 
   # 4. User Profile - User profile service
   user-profile:
@@ -56,6 +66,8 @@ services:
     ports:
       - 4000:4000 # Map port 4000 of the container to port 4000 on the host
     env_file: ../users/configs/.env # Environment variables file
+    volumes:
+      - ../users/src:/app/src # Mount the user profile service code directory
 
   # 5. Notification - Notification sending service
   notification:
@@ -68,9 +80,12 @@ services:
       - 3002:3002 # Map port 3002 of the container to port 3002 on the host
     env_file: ../notification/configs/.env # Environment variables file
     depends_on:
-      - rabbitmq # Wait for RabbitMQ to start before starting this service
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ../notification/src:/app/src # Mount the notification service code directory
 
-   # 6. Post - Post service
+  # 6. Post - Post service
   post:
     container_name: post_container
     build:
@@ -80,7 +95,8 @@ services:
     ports:
       - 3005:3005 # Map port 3005 of the container to port 3005 on the host
     env_file: ../post/configs/.env # Environment variables file
-
+    volumes:
+      - ../post/src:/app/src # Mount the post service code directory
 
 # Secrets - Securely store sensitive data
 secrets:

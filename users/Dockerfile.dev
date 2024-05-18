@@ -5,9 +5,10 @@ COPY package.json ./
 COPY tsconfig.json ./
 COPY dist ./dist
 COPY src ./src
-COPY public_key.pem /app/public_key.pem
 
-RUN ls -a
+# Copy the private key file to /app/private_key.pem in the container
+COPY private_key.pem private_key.pem
+
 RUN npm install && npm install -g nodemon
 
 EXPOSE 4000

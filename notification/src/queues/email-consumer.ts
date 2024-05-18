@@ -33,14 +33,14 @@ export async function consumeAuthEmailMessages(
       await channel.bindQueue(queue.queue, exchangeName, routingKey);
 
       channel.consume(queue.queue, async (msg: ConsumeMessage | null) => {
-        const { receiverEmail, username, resetLink, template, token } =
+        const { receiverEmail, username, resetLink, template , verifyLink} =
           JSON.parse(msg!.content.toString());
 
         const locals: IEmailLocals = {
           appLink: `${getConfig().clientUrl}`,
           appIcon: ``,
           username,
-          verifyLink: `http://localhost:3003/verify?token=${token}`,
+          verifyLink: `http://localhost:3003/verify?token=${verifyLink}`,
           resetLink,
         };
 

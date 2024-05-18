@@ -51,9 +51,9 @@ export default class NodemailerEmailApi implements EmailApi {
         locals: locals,
       });
 
-      logger.info(`Email send successfully.`);
+      logger.info('Email sent successfully.');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       logger.error(`NotificationService SendMail() method error: ${error}`);
     }
   }

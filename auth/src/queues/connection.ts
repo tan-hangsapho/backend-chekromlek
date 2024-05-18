@@ -4,6 +4,7 @@ import { logger } from "../utils/logger";
 
 export async function createQueueConnection(): Promise<Channel | undefined> {
   try {
+    console.log(process.env.NODE_ENV)
     const config = getConfig(process.env.NODE_ENV);
     const connection: Connection = await client.connect(`${config.rabbitMQ}`);
     const channel: Channel = await connection.createChannel();
