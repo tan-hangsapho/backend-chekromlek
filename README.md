@@ -101,26 +101,7 @@ Ensure you have the following software installed before proceeding:
 
 After completing these steps, your project will be successfully set up locally!
 
-### Without Docker
-
-If you prefer to set up the project without Docker, follow these commands:
-
-1. Navigate to the specific service directory:
-
-        cd service_name
     
-
-2. Install the necessary Node.js modules:
-
-        npm install
-    
-
-3. Start the development server:
-
-        npm run start:dev
-    
-
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 

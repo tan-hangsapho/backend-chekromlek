@@ -103,9 +103,7 @@ export class UserAuthController {
       const user = await this.userService.VerifyEmailToken({ token });
 
       // Generate JWT for the verified user
-      const jwtToken = await generateSignature({
-        userId: user._id,
-      });
+      const jwtToken = await generateSignature({ userId: user._id });
 
       const userDetail = await this.userService.FindUserByEmail({
         email: user.email ?? "",
@@ -115,19 +113,23 @@ export class UserAuthController {
         logger.error(
           `AuthController VerifyEmail() method error: user not found`
         );
-        throw new APIError(`User not found`, StatusCode.NotFound); // Use a specific status code
+        throw new APIError(`User not found`, StatusCode.NotFound);
       }
+
       const messageDetails: IAuthUserMessageDetails = {
         username: userDetail.username,
         email: userDetail.email,
         type: "auth",
       };
 
+      // Notify user service
       await axios.post("http://localhost:4000/v1/users/", {
-        useId: user._id,
+        userId: user._id,
         username: userDetail.username,
         email: userDetail.email,
       });
+
+      // Publish message to the queue
       await publishDirectMessage(
         authChannel,
         "Chekromlek-user-update",
@@ -136,8 +138,9 @@ export class UserAuthController {
         "User details sent to user service"
       );
 
-      return { message: "User verify email successfully", token: jwtToken };
+      return { message: "User verified email successfully", token: jwtToken };
     } catch (error: unknown) {
+      logger.error(`Error verifying email token: ${error}`);
       throw error;
     }
   }

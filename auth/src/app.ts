@@ -14,7 +14,9 @@ export const app = express();
 // Security Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+// middleware
+app.use(loggerMiddleware);
+app.use(errorHandler);
 app.set("trust proxy", 1);
 // // app.use(ipWhitelist([]))
 app.use(hpp());
@@ -30,14 +32,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "200mb" }));
 app.use(express.static("public"));
 
-//  testings swagger routes
+// Swagger Documentation (testing route)
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // routes
 RegisterRoutes(app);
-
-// middleware
-// app.all("*", (_req: Request, _res: Response, next: NextFunction) => {
-//   next(new Error(`page could be not found!`));
-// });
-app.use(loggerMiddleware);
-app.use(errorHandler);
