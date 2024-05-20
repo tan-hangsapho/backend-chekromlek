@@ -1,28 +1,5 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 <a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
 
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-
-
-
-
-<!-- PROJECT LOGO  http://localhost:3001/login/logo.svg-->
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
@@ -58,6 +35,13 @@
 
 We believe in the potential of every high schooler and university student to shape a brighter future.That why we generate the platform to let them communicate and sharing education on it. Everyone often struggle with certain problems,  and need additional help.So, we assist them by let them asking their problems in our platform and  get responding by another user to help refine the solution of problems.
 
+## Our business canva 
+![Bussiness canvas](https://github.com/tan-hangsapho/backend-chekromlek/issues/19#issue-2304967315)
+
+<a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="https://chekromlek.com/login/logo.svg" alt="Logo" width="90" height="80">
+ </a>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
@@ -90,13 +74,18 @@ Ensure you have the following software installed before proceeding:
 
 #### Setup Steps
 
-1. Navigate to the `volumes` folder:
+1. Navigate to the `backend-chekromlek` folder:
 
     ```sh
-    cd volumes
-2. Build and run the Docker containers:
+    cd folder_name
+2. Install necessary Node.js modules:
 
-        docker-compose up --build
+    ```sh
+    npm install 
+    
+3. Start all the services:
+    ```sh
+    yarn start:dev or npm run start:dev
     
 
 After completing these steps, your project will be successfully set up locally!
@@ -104,14 +93,25 @@ After completing these steps, your project will be successfully set up locally!
     
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!--Change => -->
 <!-- USAGE EXAMPLES -->
 ## Usage
+Our application is like a community that full of students who enthusiastic with self study and who want to improve their academic performance to resolve problems and find solutions. here is simple step for getting started with our platform : 
+* Login or Sign up
+* Create a post and selecting your category of what you want to ask that relate with your question field
+* In homepage you can see alot of questions and u can having fun by answering questions or sharing with others. 
 
-## User
 
-### our platform 
+### Types of Users
+#### Questioner
+ * Overview:
+  The Questioner is a user who actively seeks knowledge, solutions, or clarifications regarding specific topics or problems. They contribute to the community by asking questions that can be answered by other users, facilitating a collaborative learning environment.
+
+#### Answerer
+ * Overview:
+  The Answerer is a user who actively provides solutions, insights, and expertise in response to questions posted by others. They play a crucial role in knowledge dissemination and community support by sharing their understanding and problem-solving skills.
+
+## Our platform 
+ 
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -122,7 +122,8 @@ After completing these steps, your project will be successfully set up locally!
 ## Contact
 
 
-Figma Link: (https://www.figma.com/design/3bZbAhm0fbpqzRiPGP3uDO/Chekromlek?node-id=0%3A1&t=AVC2WFNeIEx71HA1-1)
-Project Link:(https://github.com/tan-hangsapho/backend-chekromlek)
+Figma Link: (https://www.figma.com/design/3bZbAhm0fbpqzRiPGP3uDO/Chekromlek?node-id=0%3A1&t=AVC2WFNeIEx71HA1-1) </br>
+Project Link: (https://github.com/tan-hangsapho/backend-chekromlek) </br>
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
