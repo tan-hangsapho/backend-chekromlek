@@ -5,7 +5,7 @@ COPY package.json ./
 COPY tsconfig.json ./
 COPY dist ./dist
 COPY src ./src
-COPY public_key.pem /app/public_key.pem
+COPY private_key.pem /app/private_key.pem
 
 RUN ls -a
 RUN npm install && npm install -g nodemon

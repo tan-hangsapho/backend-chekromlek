@@ -112,9 +112,6 @@ export class UserAuthController {
         email: user.email ?? "",
       });
 
-      
-    
-
       if (!userDetail) {
         logger.error(
           `AuthController VerifyEmail() method error: user not found`
@@ -234,13 +231,20 @@ export class UserAuthController {
       const newUser = await this.userService.SignUp({
         username: profile.data.name,
         email: profile.data.email,
-        googleId: profile.data._id,
+        googleId: profile.data.id,
         isVerified: true,
       });
+      // await axios.post("http://localhost:4000/v1/users/", {
+      //   googleId: profile.data._id,
+      //   username: profile.data.username,
+      //   email: profile.data.email,
+      //   createdAt: new Date(),
+      // });
       await newUser.save();
       const jwtToken = await generateSignature({
         userId: newUser._id,
       });
+
       return { token: jwtToken };
     } catch (error: any) {
       throw error;

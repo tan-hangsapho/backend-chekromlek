@@ -12,7 +12,7 @@ export const UserSaveSchema = z.object({
   answers: z.number().optional(),
   posts: z.number().optional(),
   gender: z.string().optional(),
-  createdAt: z.date().optional(),
+  createdAt: z.string().optional(),
 });
 
 export const UserUpdateSchema = z.object({

@@ -44,7 +44,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.SignUpUser)),
 
-            async function UserAuthController_SignUpUser(request: ExRequest, response: ExResponse, next: any) {
+            function UserAuthController_SignUpUser(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     reqBody: {"in":"body","name":"reqBody","required":true,"ref":"SignUpRequestBody"},
             };
@@ -57,7 +57,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'SignUpUser',
                 controller,
                 response,
@@ -74,7 +74,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.VerifyEmail)),
 
-            async function UserAuthController_VerifyEmail(request: ExRequest, response: ExResponse, next: any) {
+            function UserAuthController_VerifyEmail(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     token: {"in":"query","name":"token","required":true,"dataType":"string"},
             };
@@ -87,7 +87,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'VerifyEmail',
                 controller,
                 response,
@@ -104,7 +104,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.LoginWithEmail)),
 
-            async function UserAuthController_LoginWithEmail(request: ExRequest, response: ExResponse, next: any) {
+            function UserAuthController_LoginWithEmail(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     requestBody: {"in":"body","name":"requestBody","required":true,"ref":"LoginRequestBody"},
             };
@@ -117,7 +117,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'LoginWithEmail',
                 controller,
                 response,
@@ -134,7 +134,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.GoogleAuth)),
 
-            async function UserAuthController_GoogleAuth(request: ExRequest, response: ExResponse, next: any) {
+            function UserAuthController_GoogleAuth(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
             };
 
@@ -146,7 +146,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'GoogleAuth',
                 controller,
                 response,
@@ -163,7 +163,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.GoogleAuthCallback)),
 
-            async function UserAuthController_GoogleAuthCallback(request: ExRequest, response: ExResponse, next: any) {
+            function UserAuthController_GoogleAuthCallback(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     code: {"in":"query","name":"code","required":true,"dataType":"string"},
             };
@@ -176,7 +176,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'GoogleAuthCallback',
                 controller,
                 response,
@@ -193,7 +193,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.FacebookAuth)),
 
-            async function UserAuthController_FacebookAuth(request: ExRequest, response: ExResponse, next: any) {
+            function UserAuthController_FacebookAuth(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
             };
 
@@ -205,7 +205,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'FacebookAuth',
                 controller,
                 response,
@@ -222,7 +222,7 @@ export function RegisterRoutes(app: Router) {
             ...(fetchMiddlewares<RequestHandler>(UserAuthController)),
             ...(fetchMiddlewares<RequestHandler>(UserAuthController.prototype.FacebookAuthCallback)),
 
-            async function UserAuthController_FacebookAuthCallback(request: ExRequest, response: ExResponse, next: any) {
+            function UserAuthController_FacebookAuthCallback(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
                     code: {"in":"query","name":"code","required":true,"dataType":"string"},
             };
@@ -235,7 +235,7 @@ export function RegisterRoutes(app: Router) {
 
                 const controller = new UserAuthController();
 
-              await templateService.apiHandler({
+              templateService.apiHandler({
                 methodName: 'FacebookAuthCallback',
                 controller,
                 response,

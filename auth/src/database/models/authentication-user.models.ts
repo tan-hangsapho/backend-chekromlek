@@ -33,8 +33,6 @@ const userAuthSchema = new mongoose.Schema(
     toJSON: {
       transform(_doc, ret) {
         delete ret.password;
-        delete ret.googleId;
-        delete ret.facebookId;
         delete ret.__v;
       },
     },

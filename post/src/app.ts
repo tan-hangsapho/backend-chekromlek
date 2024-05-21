@@ -57,7 +57,6 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 // Global API V1
 // ========================
 
-
 // ========================
 // Global Error Handler
 // ========================
