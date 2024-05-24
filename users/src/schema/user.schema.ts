@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const UserSaveSchema = z.object({
-  useId: z.string().optional(),
+  userId: z.string().optional(),
   username: z.string().optional(),
   favorites: z.array(z.string()).optional(),
   email: z.string().email().optional(),

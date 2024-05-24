@@ -5,13 +5,16 @@ import helmet from "helmet";
 import cors from "cors";
 import compression from "compression";
 import { urlencoded } from "body-parser";
+import swaggerUi from "swagger-ui-express";
+import * as swaggerDocument from "../dist/swagger/swagger.json";
 import { verify } from "jsonwebtoken";
 import loggerMiddleware from "@post/middlewares/logger-handle";
 import { StatusCode } from "./utils/const";
 import { logger } from "./utils/logger";
-import { publicKey } from "./server";
+import { private_key } from "./server";
 import { errorHandler } from "@post/middlewares/error-handle";
 import getConfig from "@post/utils/config";
+import { RegisterRoutes } from "./routes/routes";
 
 export const app = express();
 
@@ -43,9 +46,9 @@ app.use(loggerMiddleware);
 app.use((req: Request, _res: Response, next: NextFunction) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
-    console.log("token", publicKey);
+    console.log("token", private_key);
 
-    const payload = verify(token, publicKey);
+    const payload = verify(token, private_key);
     console.log("payload", payload);
     // @ts-ignore
     req.currentUser = payload;
@@ -53,11 +56,15 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
   next();
 });
 
+
 // ========================
 // Global API V1
 // ========================
 
-
+// Swagger Documentation (testing route)
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// routes
+RegisterRoutes(app);
 // ========================
 // Global Error Handler
 // ========================
@@ -69,3 +76,4 @@ app.use("*", (req: Request, res: Response, _next: NextFunction) => {
     .json({ message: "The endpoint called does not exist." });
 });
 app.use(errorHandler);
+

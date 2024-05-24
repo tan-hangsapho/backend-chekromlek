@@ -17,7 +17,7 @@ export interface IUser {
 
 const userSchema = new mongoose.Schema(
   {
-    useId: { type: mongoose.Schema.Types.ObjectId, ref: 'Auth' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Auth' },
     username: { type: String, require: true },
     email: { type: String, required: true, unique: true },
     profile: { type: String },

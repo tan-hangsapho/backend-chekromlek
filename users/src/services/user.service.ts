@@ -7,7 +7,7 @@ export class UserService {
   constructor() {
     this.userRepo = new UserRepository();
   }
-  async CreateUser(user: IUser & { useId: string }) {
+  async CreateUser(user: IUser & { userId: string }) {
     try {
       const newUser = await this.userRepo.createUser(user);
       return newUser;

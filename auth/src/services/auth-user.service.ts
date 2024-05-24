@@ -121,6 +121,38 @@ export class UserAuthService {
   // 4. save user in database
   // 5. delete the token from database
 
+  async VerifyEmailToken({ token }: { token: string }) {
+    try {
+      const exitedToken = await this.verificationRepo.FindAccountVerificationToken({ token });
+  
+      // Check if the token is invalid
+      if (!exitedToken) {
+        logger.error(`Verification token is invalid: ${token}`);
+        throw new APIError("Verification token is invalid", StatusCode.BadRequest);
+      }
+  
+      const user = await this.userRepo.FindUserById({ id: exitedToken.userId.toString() });
+  
+      if (!user) {
+        logger.error(`User does not exist for token: ${token}`);
+        throw new APIError("User does not exist.", StatusCode.NotFound);
+      }
+  
+      // Change the verify status to true
+      user.isVerified = true;
+      await user.save();
+  
+      // After verify success, delete the token
+      await this.verificationRepo.deleteAccountVerificationToken({ token });
+  
+      return user;
+    } catch (error: unknown) {
+      logger.error(`Error in VerifyEmailToken service method: ${error}`);
+      throw error;
+    }
+  }
+
+
   // async VerifyEmailToken({ token }: { token: string }) {
   //   const isTokenExisting =
   //     await this.verificationRepo.FindAccountVerificationToken({ token });
@@ -165,23 +197,24 @@ export class UserAuthService {
   //   });
   //   return user;
   // }
-  async VerifyEmailToken({ token }: { token: string }) {
-    const isTokenExisting = await this.verificationRepo.FindAccountVerificationToken({ token });
+  // async VerifyEmailToken({ token }: { token: string }) {
+  //   const isTokenExisting = await this.verificationRepo.FindAccountVerificationToken({ token });
+  //   console.log("Token:" , isTokenExisting);
   
-    if (!isTokenExisting) {
-      throw new APIError("Verification token is invalid", StatusCode.BadRequest);
-    }
+  //   if (!isTokenExisting) {
+  //     throw new APIError("Verification token is invalid", StatusCode.BadRequest);
+  //   }
+   
+  //   const user = await this.userRepo.FindUserById({ id: isTokenExisting.userId.toString() });
+  //   if (!user) {
+  //     throw new APIError("User does not exist", StatusCode.NotFound);
+  //   }
   
-    const user = await this.userRepo.FindUserById({ id: isTokenExisting.userId.toString() });
-    if (!user) {
-      throw new APIError("User does not exist", StatusCode.NotFound);
-    }
-  
-    user.isVerified = true;
-    await user.save();
-    await this.verificationRepo.deleteAccountVerificationToken({ token });
-    return user;
-  }
+  //   user.isVerified = true;
+  //   await user.save();
+  //   await this.verificationRepo.deleteAccountVerificationToken({ token });
+  //   return user;
+  // }
   
 
   async Login(userDetail: UserSignInSchemaType) {

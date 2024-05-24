@@ -101,12 +101,17 @@ export class UserAuthController {
     try {
       // Verify the email token
       const user = await this.userService.VerifyEmailToken({ token });
+      console.log("This is user:", user);
 
       // Generate JWT for the verified user
       const jwtToken = await generateSignature({ userId: user._id });
 
+      console.log(jwtToken);
+      // const userDetail = await this.userService.FindUserByEmail({
+      //   email: user.email ?? "",
+      // });
       const userDetail = await this.userService.FindUserByEmail({
-        email: user.email ?? "",
+        email: user.email! as string,
       });
 
       if (!userDetail) {
@@ -116,18 +121,17 @@ export class UserAuthController {
         throw new APIError(`User not found`, StatusCode.NotFound);
       }
 
-      const messageDetails: IAuthUserMessageDetails = {
-        username: userDetail.username,
-        email: userDetail.email,
-        type: "auth",
-      };
-
-      // Notify user service
       await axios.post("http://localhost:4000/v1/users/", {
         userId: user._id,
         username: userDetail.username,
         email: userDetail.email,
       });
+
+      const messageDetails: IAuthUserMessageDetails = {
+        username: userDetail.username,
+        email: userDetail.email,
+        type: "auth",
+      };
 
       // Publish message to the queue
       await publishDirectMessage(
@@ -138,10 +142,21 @@ export class UserAuthController {
         "User details sent to user service"
       );
 
+      console.log(jwtToken);
+
       return { message: "User verified email successfully", token: jwtToken };
-    } catch (error: unknown) {
+    } catch (error) {
       logger.error(`Error verifying email token: ${error}`);
-      throw error;
+
+      // Ensure the response is always JSON
+      if (error instanceof APIError) {
+        throw error; // Or handle APIError specifically if needed
+      } else {
+        throw new APIError(
+          "Internal Server Error",
+          StatusCode.InternalServerError
+        );
+      }
     }
   }
   @SuccessResponse(StatusCode.OK, "OK")
