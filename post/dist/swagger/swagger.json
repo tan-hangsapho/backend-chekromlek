@@ -7,61 +7,35 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
-			"IUser": {
+			"IPost": {
 				"properties": {
-					"_id": {
-						"type": "string"
-					},
 					"username": {
 						"type": "string"
 					},
-					"email": {
+					"title": {
 						"type": "string"
 					},
-					"profile": {
+					"descriptions": {
 						"type": "string"
 					},
-					"favorites": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"questions": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array"
-					},
-					"bio": {
+					"userId": {
 						"type": "string"
 					},
-					"work": {
+					"postImage": {
 						"type": "string"
 					},
-					"answers": {
-						"type": "number",
-						"format": "double"
-					},
-					"posts": {
-						"type": "number",
-						"format": "double"
-					},
-					"gender": {
+					"category": {
 						"type": "string"
 					},
 					"createdAt": {
-						"anyOf": [
-							{
-								"type": "string",
-								"format": "date-time"
-							},
-							{
-								"type": "string"
-							}
-						]
+						"type": "string",
+						"format": "date-time"
 					}
 				},
+				"required": [
+					"title",
+					"category"
+				],
 				"type": "object",
 				"additionalProperties": false
 			}
@@ -69,7 +43,7 @@
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "user",
+		"title": "post",
 		"version": "1.0.0",
 		"license": {
 			"name": "MIT"
@@ -77,12 +51,12 @@
 		"contact": {}
 	},
 	"paths": {
-		"/v1/users": {
+		"/v1/post": {
 			"post": {
-				"operationId": "SaveProfile",
+				"operationId": "SavePost",
 				"responses": {
 					"201": {
-						"description": "Created",
+						"description": "Created successfully",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -99,7 +73,7 @@
 							"schema": {
 								"allOf": [
 									{
-										"$ref": "#/components/schemas/IUser"
+										"$ref": "#/components/schemas/IPost"
 									},
 									{
 										"properties": {
@@ -119,12 +93,12 @@
 				}
 			}
 		},
-		"/v1/users/{userId}": {
+		"/v1/post/{id}": {
 			"put": {
-				"operationId": "UpdateProfile",
+				"operationId": "UpdatePost",
 				"responses": {
 					"200": {
-						"description": "OK",
+						"description": "Okay",
 						"content": {
 							"application/json": {
 								"schema": {}
@@ -136,7 +110,7 @@
 				"parameters": [
 					{
 						"in": "path",
-						"name": "userId",
+						"name": "id",
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -148,7 +122,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/IUser"
+								"$ref": "#/components/schemas/IPost"
 							}
 						}
 					}

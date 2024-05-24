@@ -3,7 +3,7 @@
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { TsoaRoute, fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './../controllers/user.controller';
+import { PostController } from './../controllers/post.controller';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 
 
@@ -11,21 +11,16 @@ import type { Request as ExRequest, Response as ExResponse, RequestHandler, Rout
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "IUser": {
+    "IPost": {
         "dataType": "refObject",
         "properties": {
-            "_id": {"dataType":"string"},
             "username": {"dataType":"string"},
-            "email": {"dataType":"string"},
-            "profile": {"dataType":"string"},
-            "favorites": {"dataType":"array","array":{"dataType":"string"}},
-            "questions": {"dataType":"array","array":{"dataType":"string"}},
-            "bio": {"dataType":"string"},
-            "work": {"dataType":"string"},
-            "answers": {"dataType":"double"},
-            "posts": {"dataType":"double"},
-            "gender": {"dataType":"string"},
-            "createdAt": {"dataType":"union","subSchemas":[{"dataType":"datetime"},{"dataType":"string"}]},
+            "title": {"dataType":"string","required":true},
+            "descriptions": {"dataType":"string"},
+            "userId": {"dataType":"string"},
+            "postImage": {"dataType":"string"},
+            "category": {"dataType":"string","required":true},
+            "createdAt": {"dataType":"datetime"},
         },
         "additionalProperties": false,
     },
@@ -40,13 +35,13 @@ export function RegisterRoutes(app: Router) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-        app.post('/v1/users',
-            ...(fetchMiddlewares<RequestHandler>(UserController)),
-            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.SaveProfile)),
+        app.post('/v1/post',
+            ...(fetchMiddlewares<RequestHandler>(PostController)),
+            ...(fetchMiddlewares<RequestHandler>(PostController.prototype.SavePost)),
 
-            async function UserController_SaveProfile(request: ExRequest, response: ExResponse, next: any) {
+            async function PostController_SavePost(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    reqBody: {"in":"body","name":"reqBody","required":true,"dataType":"intersection","subSchemas":[{"ref":"IUser"},{"dataType":"nestedObjectLiteral","nestedProperties":{"userId":{"dataType":"string","required":true}}}]},
+                    reqBody: {"in":"body","name":"reqBody","required":true,"dataType":"intersection","subSchemas":[{"ref":"IPost"},{"dataType":"nestedObjectLiteral","nestedProperties":{"userId":{"dataType":"string","required":true}}}]},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -55,10 +50,10 @@ export function RegisterRoutes(app: Router) {
             try {
                 validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-                const controller = new UserController();
+                const controller = new PostController();
 
               await templateService.apiHandler({
-                methodName: 'SaveProfile',
+                methodName: 'SavePost',
                 controller,
                 response,
                 next,
@@ -70,14 +65,14 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.put('/v1/users/:userId',
-            ...(fetchMiddlewares<RequestHandler>(UserController)),
-            ...(fetchMiddlewares<RequestHandler>(UserController.prototype.UpdateProfile)),
+        app.put('/v1/post/:id',
+            ...(fetchMiddlewares<RequestHandler>(PostController)),
+            ...(fetchMiddlewares<RequestHandler>(PostController.prototype.UpdatePost)),
 
-            async function UserController_UpdateProfile(request: ExRequest, response: ExResponse, next: any) {
+            async function PostController_UpdatePost(request: ExRequest, response: ExResponse, next: any) {
             const args: Record<string, TsoaRoute.ParameterSchema> = {
-                    reqBody: {"in":"body","name":"reqBody","required":true,"ref":"IUser"},
-                    userId: {"in":"path","name":"userId","required":true,"dataType":"string"},
+                    id: {"in":"path","name":"id","required":true,"dataType":"string"},
+                    reqBody: {"in":"body","name":"reqBody","required":true,"ref":"IPost"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -86,10 +81,10 @@ export function RegisterRoutes(app: Router) {
             try {
                 validatedArgs = templateService.getValidatedArgs({ args, request, response });
 
-                const controller = new UserController();
+                const controller = new PostController();
 
               await templateService.apiHandler({
-                methodName: 'UpdateProfile',
+                methodName: 'UpdatePost',
                 controller,
                 response,
                 next,

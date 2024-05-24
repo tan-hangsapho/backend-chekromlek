@@ -25,7 +25,7 @@ export class UserController {
   @Post('/')
   @Middlewares(validateInput(UserSaveSchema))
   public async SaveProfile(
-    @Body() reqBody: IUser & { useId: string }
+    @Body() reqBody: IUser & { userId: string }
   ): Promise<any> {
     try {
       // const authResponse = await axios.get(

@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
+import { PostTypesRepo } from "./@types/Post-model.interface";
+import { optional } from "zod";
 
 export interface IPost {
-  _id?: string;
+  username?: string
   title: string;
   descriptions?: string;
   userId?: string;
-  likes?: number;
-  answer?: string;
-  image?: string;
+  postImage?: string;
   category: string;
   createdAt?: Date;
 }
@@ -15,11 +15,12 @@ export interface IPost {
 const postModel = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    username: { type: mongoose.Schema.Types.String, ref: "User"},
     title: { type: String, required: true },
     descriptions: { type: String, required: true },
-    image: { type: String },
+    postImage: { type: String , optional},
     category: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, optional },
   },
   {
     toJSON: {
@@ -30,3 +31,9 @@ const postModel = new mongoose.Schema(
     },
   }
 );
+
+export const PostSchema = mongoose.model<PostTypesRepo> (
+  "CreatePost", 
+  postModel
+)
+
